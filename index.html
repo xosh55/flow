@@ -4,100 +4,102 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>KM Kommandocentral</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0f;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.06);--pri:#6366f1;--ok:#10B981;--warn:#F59E0B;--err:#EF4444;--t1:#f1f5f9;--t2:rgba(255,255,255,0.4);--r:10px}
-body{font-family:-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;min-height:100dvh;font-size:14px;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+:root{--bg:#0a0a0f;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.06);--pri:#6366f1;--ok:#10B981;--warn:#F59E0B;--err:#EF4444;--t1:#f1f5f9;--t2:rgba(255,255,255,0.4);--r:10px;--cyan:#22d3ee;--lila:#a78bfa;--gul:#facc15}
+body{font-family:-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100dvh;font-size:14px;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
 button{cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font-family:inherit;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--t1);border-radius:8px;padding:10px 12px;width:100%;outline:none;font-size:16px}
 input:focus,select:focus,textarea:focus{border-color:var(--pri)}
 select option{background:#14142a;color:var(--t1)}
 label{display:block;color:var(--t2);font-size:12px;margin:10px 0 4px}
 ::-webkit-scrollbar{height:0;width:0}
-
-/* HEADER */
 .header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
-.header h1{font-size:18px;font-weight:700;letter-spacing:-0.5px}
-.header h1 span{color:var(--t2);font-weight:400;font-size:11px;margin-left:5px}
-.stats{display:flex;gap:10px;font-size:11px;color:var(--t2)}
-.stats b{color:var(--t1)}
-
-/* TABS - bottom on mobile */
-.tabs{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;background:var(--bg)}
-.tab-btn{background:none;border:none;color:var(--t2);padding:8px 18px;border-radius:20px;font-size:13px;transition:.15s;white-space:nowrap;min-height:38px}
+.header h1{font-size:18px;font-weight:700}.header h1 span{color:var(--t2);font-weight:400;font-size:11px;margin-left:5px}
+.stats{display:flex;gap:10px;font-size:11px;color:var(--t2)}.stats b{color:var(--t1)}
+.tabs{display:flex;gap:3px;padding:8px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;background:var(--bg);overflow-x:auto}
+.tab-btn{background:none;border:none;color:var(--t2);padding:7px 11px;border-radius:20px;font-size:12px;transition:.15s;white-space:nowrap;min-height:36px;flex-shrink:0}
 .tab-btn.active{background:var(--pri);color:#fff}
-.tab-btn:hover:not(.active){background:rgba(255,255,255,0.04)}
-
 .content{padding:12px 12px 20px;max-width:1400px;margin:0 auto}
 .tp{display:none}.tp.active{display:block}
-
 .b{font-size:10px;padding:2px 7px;border-radius:8px;display:inline-block;white-space:nowrap}
 .b-type{background:rgba(99,102,241,0.1);color:#a5b4fc}
-
-/* GROUP HEADERS */
 .grp{margin-bottom:16px}
-.grp-title{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;padding:6px 0;margin-bottom:2px;display:flex;align-items:center;gap:6px}
-.grp-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.grp-title .cnt{font-size:10px;color:var(--t2);background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:6px}
-
-/* PROJECT ROW */
+.grp-hdr{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;padding:6px 0;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.grp-hdr .d{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.grp-hdr .c{font-size:10px;color:var(--t2);background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:6px}
+/* PROJECT ROW (shared) */
 .prow{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;overflow:hidden}
 .prow-top{display:flex;align-items:center;gap:10px;padding:10px 12px}
 .prow-info{min-width:0;flex-shrink:0}
 .prow-info h3{font-size:14px;font-weight:600;display:flex;align-items:center;gap:5px}
 .prow-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
-.prio-dots{display:flex;gap:2px}
-.prio-dots i{width:6px;height:6px;border-radius:50%;background:var(--pri);display:block}
-.prio-dots i.off{opacity:.12}
-.edit-btn{background:none;border:none;color:var(--t2);font-size:11px;padding:4px 6px;border-radius:4px;min-height:28px;min-width:28px;display:flex;align-items:center;justify-content:center}
-.edit-btn:hover,.edit-btn:active{color:var(--t1);background:rgba(255,255,255,0.06)}
-.ver{font-size:11px;color:var(--t2)}
-.prog-text{font-size:10px;color:var(--t2)}
-
-/* TIMELINE - horizontal scroll */
-.tl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:2px 12px 10px;scroll-padding:12px}
-.tl{display:flex;align-items:flex-start;min-width:max-content;gap:0;padding-right:12px}
-.tl-step{display:flex;flex-direction:column;align-items:center;scroll-snap-align:start}
+.prio-dots{display:flex;gap:2px}.prio-dots i{width:6px;height:6px;border-radius:50%;background:var(--pri);display:block}.prio-dots i.off{opacity:.12}
+.edit-btn{background:none;border:none;color:var(--t2);font-size:11px;padding:4px 6px;border-radius:4px;min-height:28px;min-width:28px;display:flex;align-items:center;justify-content:center}.edit-btn:active{color:var(--t1);background:rgba(255,255,255,0.06)}
+.ver{font-size:11px;color:var(--t2)}.prog-text{font-size:10px;color:var(--t2)}
+/* HORIZ TIMELINE (Företag/Personligt — scrollable) */
+.tl-s{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 12px 6px}
+.tl{display:flex;align-items:flex-start;min-width:max-content;gap:0;padding-right:8px}
+/* WRAP TIMELINE (Privat — wraps) */
+.tl-w{padding:4px 12px 8px}.tl-w .tl{min-width:0;flex-wrap:wrap;gap:3px 0}
+.tl-step{display:flex;flex-direction:column;align-items:center}
 .tl-node{display:flex;align-items:center}
-.tl-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:transparent;cursor:pointer;transition:.15s;z-index:2;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;flex-shrink:0;-webkit-tap-highlight-color:transparent}
-.tl-dot:active{transform:scale(0.9)}
-.tl-dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
-.tl-dot.active{background:var(--pri);border-color:var(--pri);box-shadow:0 0 10px rgba(99,102,241,0.4);animation:pulse 2s infinite;color:#fff}
-.tl-dot.upcoming{border-color:rgba(255,255,255,0.1);background:rgba(255,255,255,0.02)}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:transparent;cursor:pointer;transition:.15s;z-index:2;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;flex-shrink:0}
+.dot:active{transform:scale(0.9)}
+.dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.dot.act{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:0 0 8px rgba(99,102,241,0.4);animation:pulse 2s infinite}
+.dot.sel{box-shadow:0 0 0 3px rgba(99,102,241,0.25)}
 @keyframes pulse{0%,100%{box-shadow:0 0 4px rgba(99,102,241,0.3)}50%{box-shadow:0 0 14px rgba(99,102,241,0.5)}}
-.tl-line{width:20px;height:2px;background:rgba(255,255,255,0.06);flex-shrink:0}
-.tl-line.done-line{background:var(--ok)}
-.tl-line.active-line{background:linear-gradient(90deg,var(--ok),var(--pri))}
-.tl-lbl{font-size:9px;color:var(--t2);margin-top:3px;text-align:center;white-space:nowrap}
-.tl-lbl.done{color:rgba(16,185,129,0.6)}
-.tl-lbl.active{color:var(--pri);font-weight:600}
-.tl-res{height:14px;font-size:10px;display:flex;align-items:center;justify-content:center;margin-top:1px}
-
-/* LEGEND */
-.legend{display:flex;gap:10px;font-size:10px;color:var(--t2);margin-bottom:10px;flex-wrap:wrap;align-items:center;padding:0 2px}
-.legend-item{display:flex;align-items:center;gap:3px}
-.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
-
-/* STEG TAB */
-.steg-flow{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
-.steg-flow .arr{color:var(--t2);font-size:12px}
-.steg-flow .sf{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:10px;white-space:nowrap}
-.steg-cats{display:grid;grid-template-columns:1fr;gap:8px}
-.steg-cat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.steg-cat h3{font-size:12px;padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.steg-cat h3::after{content:'▾';color:var(--t2);font-size:10px}
-.steg-cat.collapsed .steg-body{display:none}
-.steg-cat.collapsed h3::after{content:'▸'}
-.steg-item{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.02);font-size:12px;line-height:1.5}
-.steg-item:last-child{border:none}
-.steg-item strong{display:block;font-size:13px}
-.steg-item .desc{color:var(--t2);font-size:11px;margin-top:1px}
-.steg-item .when{color:#818cf8;font-size:10px;margin-top:3px}
-.steg-item .modes{margin-top:4px}
-.mode-tag{font-size:10px;background:rgba(99,102,241,0.08);color:#818cf8;padding:2px 7px;border-radius:4px;display:inline-block;margin:2px 1px}
-.search-input{max-width:100%;margin-bottom:10px;font-size:16px}
-
+.ln{width:14px;height:2px;background:rgba(255,255,255,0.06);flex-shrink:0}
+.ln.done-l{background:var(--ok)}.ln.act-l{background:linear-gradient(90deg,var(--ok),var(--pri))}
+.lbl{font-size:8px;color:var(--t2);margin-top:3px;text-align:center;white-space:nowrap;max-width:52px;overflow:hidden;text-overflow:ellipsis}
+.lbl.done{color:rgba(16,185,129,0.5)}.lbl.act{color:var(--pri);font-weight:600}
+.tl-res{height:12px;font-size:9px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.tl-dl{font-size:7px;color:var(--t2);margin-top:0}.tl-dl.soon{color:var(--warn)}
+.ins{display:flex;align-items:center;flex-shrink:0;align-self:flex-start;padding-top:2px}
+.ins-btn{width:28px;height:28px;border-radius:50%;border:1.5px dashed rgba(255,255,255,0.06);background:transparent;color:rgba(255,255,255,0.12);font-size:14px;display:flex;align-items:center;justify-content:center}
+.ins-btn:active{border-color:var(--pri);color:var(--pri);background:rgba(99,102,241,0.08)}
+/* PRIVAT specifics */
+.tier{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:600}
+.t1{background:rgba(6,182,212,0.12);color:var(--cyan)}.t2{background:rgba(139,92,246,0.12);color:var(--lila)}.t3{background:rgba(234,179,8,0.12);color:var(--gul)}
+.prog-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin:0 12px 6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px}
+.chev{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,0.3);flex-shrink:0}
+.chev.open{background:rgba(99,102,241,0.1);border-color:rgba(99,102,241,0.2);color:var(--pri)}
+.priv-head{display:flex;align-items:flex-start;gap:10px;padding:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.priv-head-c{flex:1;min-width:0}
+.priv-head h3{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.priv-row2{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.priv-left{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.priv-right{display:flex;align-items:center;gap:8px}
+.budget{font-size:10px;color:var(--t2)}.budget b{color:var(--ok)}
+.dl-tag{font-size:10px;color:var(--t2)}.dl-tag.soon{color:var(--warn)}.dl-tag.over{color:var(--err)}.dl-tag.ok{color:var(--ok)}
+.arch-grp{opacity:.3}.arch-grp .prow{border-style:dashed}
+/* STEP PANEL */
+.step-panel{background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.04);padding:14px 12px}
+.sp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sp-head h4{font-size:13px;font-weight:600}
+.sp-sec{margin-bottom:10px}
+.sp-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.2);margin-bottom:5px}
+.ck{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;line-height:1.4}
+.ck:last-of-type{border:none}
+.ck-box{width:22px;height:22px;border-radius:5px;border:1.5px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:transparent;cursor:pointer}
+.ck-box.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.ck-box:active{transform:scale(0.9)}
+.ck-txt{flex:1}.ck-txt.on{text-decoration:line-through;color:rgba(255,255,255,0.2)}
+.ck-del{background:none;border:none;color:rgba(255,255,255,0.12);font-size:12px;padding:4px;min-height:28px;min-width:28px;display:flex;align-items:center;justify-content:center}
+.ck-del:active{color:var(--err)}
+.ck-add{display:flex;gap:6px;margin-top:6px}
+.ck-add input{flex:1;font-size:14px;padding:8px}
+.ck-add button{flex-shrink:0;min-width:44px;min-height:38px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-size:16px}
+.sp-notes{width:100%;min-height:50px;font-size:13px;line-height:1.6;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:10px;resize:vertical;color:rgba(255,255,255,0.6)}
+.sp-notes:focus{border-color:var(--pri)}
+.lk{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px}
+.lk a{color:#818cf8;text-decoration:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lk-add{display:flex;gap:6px;margin-top:6px}
+.lk-add input{flex:1;font-size:14px;padding:8px}
+.lk-add button{flex-shrink:0;min-width:44px;min-height:38px;background:rgba(255,255,255,0.06);color:var(--t2);border:1px solid var(--border);border-radius:8px;font-size:14px}
 /* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;justify-content:center;align-items:flex-end;overflow:hidden}
 .modal-bg.open{display:flex}
@@ -105,329 +107,186 @@ label{display:block;color:var(--t2);font-size:12px;margin:10px 0 4px}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal h2{font-size:16px;margin-bottom:2px}
 .modal-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--t2);font-size:20px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{color:var(--t1)}
-.modal-btns{display:flex;gap:8px;margin-top:16px}
-.modal-btns .btn{flex:1;min-height:44px}
+.modal-btns{display:flex;gap:8px;margin-top:16px}.modal-btns .btn{flex:1;min-height:44px}
 .btn{padding:10px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;min-height:44px}
-.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover,.btn-pri:active{opacity:.9}
-.btn-ghost{background:none;border:1px solid var(--border);color:var(--t2)}.btn-ghost:hover,.btn-ghost:active{border-color:var(--t1);color:var(--t1)}
-.btn-danger{background:var(--err);color:#fff}
+.btn-pri{background:var(--pri);color:#fff}.btn-danger{background:var(--err);color:#fff}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--t2)}
 .btn-add{background:var(--pri);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;min-height:38px}
 .row2{display:flex;gap:8px}.row2>*{flex:1}
-
+.ms-list{margin-top:8px}.ms-item{display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}.ms-item:last-child{border:none}.ms-item .ms-name{flex:1}
+.ms-del{background:none;border:none;color:var(--t2);font-size:14px;padding:4px 8px;min-height:36px;min-width:36px;display:flex;align-items:center;justify-content:center}.ms-del:active{color:var(--err)}
+/* STEG TAB */
+.steg-flow{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.steg-flow .arr{color:var(--t2);font-size:12px}.steg-flow .sf{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:10px;white-space:nowrap}
+.steg-cats{display:grid;grid-template-columns:1fr;gap:8px}
+.steg-cat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.steg-cat h3{font-size:12px;padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.steg-cat h3::after{content:'▾';color:var(--t2);font-size:10px}.steg-cat.collapsed .steg-body{display:none}.steg-cat.collapsed h3::after{content:'▸'}
+.steg-item{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.02);font-size:12px;line-height:1.5}.steg-item:last-child{border:none}
+.steg-item strong{display:block;font-size:13px}.steg-item .desc{color:var(--t2);font-size:11px}.steg-item .when{color:#818cf8;font-size:10px;margin-top:2px}.steg-item .modes{margin-top:3px}
+.mode-tag{font-size:10px;background:rgba(99,102,241,0.08);color:#818cf8;padding:2px 6px;border-radius:4px;display:inline-block;margin:1px}
+.search-input{max-width:100%;margin-bottom:10px;font-size:16px}
+.legend{display:flex;gap:8px;font-size:10px;color:var(--t2);margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.legend-item{display:flex;align-items:center;gap:3px}.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .toast-wrap{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:200}
-.toast{padding:10px 18px;border-radius:10px;font-size:13px;color:#fff;margin-bottom:6px;animation:tin .2s;text-align:center;white-space:nowrap}
-.toast.ok{background:#065f46}.toast.err{background:#7f1d1d}
+.toast{padding:10px 18px;border-radius:10px;font-size:13px;color:#fff;margin-bottom:6px;animation:tin .2s;text-align:center;white-space:nowrap}.toast.ok{background:#065f46}.toast.err{background:#7f1d1d}
 @keyframes tin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-
 .data-bar{display:flex;gap:6px;padding:8px 16px;border-top:1px solid var(--border);justify-content:center;flex-wrap:wrap}
-.data-bar button{font-size:11px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--t2);min-height:36px}
-.data-bar button:active{color:var(--t1);border-color:var(--t1)}
-
-/* Desktop tweaks */
-@media(min-width:700px){
-  .content{padding:16px 20px}
-  .prow-top{padding:10px 16px}
-  .tl-scroll{padding:2px 16px 10px}
-  .prow-info{min-width:180px}
-  .steg-cats{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
-  .modal-bg{align-items:center}
-  .modal{border-radius:var(--r);animation:none}
-  .tl-dot{width:22px;height:22px}
-  .tl-line{width:26px}
-}
-@media(min-width:1000px){
-  .tl-dot{width:20px;height:20px;font-size:9px}
-  .tl-line{width:30px}
-}
+.data-bar button{font-size:11px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--t2);min-height:36px}.data-bar button:active{color:var(--t1);border-color:var(--t1)}
+@media(min-width:700px){.content{padding:16px 20px}.prow-top{padding:10px 16px}.prow-info{min-width:180px}.tl-s{padding:2px 16px 6px}.steg-cats{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}.modal-bg{align-items:center}.modal{border-radius:var(--r);animation:none;max-height:85vh}.dot{width:22px;height:22px}.ln{width:22px}.ins-btn{width:22px;height:22px;font-size:13px}}
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>KM<span>Kommandocentral</span></h1>
-  <div class="stats" id="stats"></div>
-</div>
+<div class="header"><h1>KM<span>Kommandocentral</span></h1><div class="stats" id="stats"></div></div>
 <div class="tabs">
-  <button class="tab-btn active" data-t="cmd">🚁 Översikt</button>
-  <button class="tab-btn" data-t="steg">📖 Steg & Prompter</button>
+  <button class="tab-btn active" data-t="biz">🏢 Företag</button>
+  <button class="tab-btn" data-t="pers">👤 Personligt</button>
+  <button class="tab-btn" data-t="priv">🧘 Privat</button>
+  <button class="tab-btn" data-t="steg">📖 Steg</button>
 </div>
 <div class="content">
-<div class="tp active" id="p-cmd">
-  <div class="top-bar">
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--ok)"></div>Klar</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--pri);box-shadow:0 0 4px rgba(99,102,241,0.4)"></div>Pågår</div>
-      <div class="legend-item"><div class="legend-dot" style="border:2px solid rgba(255,255,255,0.1);width:6px;height:6px"></div>Kommande</div>
-      <div class="legend-item">🔬 Research</div>
-    </div>
-    <button class="btn-add" onclick="openPM()">+ Projekt</button>
-  </div>
-  <div id="proj-list"></div>
+<div class="tp active" id="p-biz"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:var(--ok)"></div>Klar</div><div class="legend-item"><div class="legend-dot" style="background:var(--pri)"></div>Pågår</div><div class="legend-item">🔬 Research</div></div><button class="btn-add" onclick="openPM()">+ Projekt</button></div><div id="biz-list"></div></div>
+<div class="tp" id="p-pers"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:var(--ok)"></div>Klar</div><div class="legend-item"><div class="legend-dot" style="background:var(--pri)"></div>Pågår</div></div><button class="btn-add" onclick="openPM(null,'personal')">+ Personligt</button></div><div id="pers-list"></div></div>
+<div class="tp" id="p-priv"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="legend"><div class="legend-item"><div class="legend-dot" style="background:var(--cyan)"></div>+</div><div class="legend-item"><div class="legend-dot" style="background:var(--lila)"></div>++</div><div class="legend-item"><div class="legend-dot" style="background:var(--gul)"></div>+++</div></div><button class="btn-add" onclick="openPrivM()">+ Nytt</button></div><div id="priv-list"></div></div>
+<div class="tp" id="p-steg"><input class="search-input" id="steg-search" placeholder="Sök steg..." oninput="renderSteg()"><div class="steg-flow" id="steg-flow"></div><div class="steg-cats" id="steg-list"></div></div>
 </div>
-<div class="tp" id="p-steg">
-  <input class="search-input" id="steg-search" placeholder="Sök steg eller prompt..." oninput="renderSteg()">
-  <div style="font-size:12px;font-weight:600;margin-bottom:6px">Arbetsflöde</div>
-  <div class="steg-flow" id="steg-flow"></div>
-  <div class="steg-cats" id="steg-list"></div>
-</div>
-</div>
-<div class="data-bar">
-  <button onclick="expD()">📥 Export</button>
-  <button onclick="document.getElementById('impF').click()">📤 Import</button>
-  <input type="file" id="impF" accept=".json" style="display:none" onchange="impD(event)">
-  <button onclick="clrD()">🗑️ Rensa</button>
-</div>
+<div class="data-bar"><button onclick="expD()">📥 Export</button><button onclick="document.getElementById('impF').click()">📤 Import</button><input type="file" id="impF" accept=".json" style="display:none" onchange="impD(event)"><button onclick="clrD()">🗑️ Rensa</button></div>
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeM()"><div class="modal" id="mc"></div></div>
 <div class="toast-wrap" id="toasts"></div>
-
 <script>
-const SK='km_cmd4';
-function gid(){return Math.random().toString(36).slice(2,8)}
-
-const DEF_MS=[
-  {label:'Research',icon:'🔬',research:true},
-  {label:'Design',icon:'🎨',research:true},
-  {label:'Grund',icon:'🔨',research:false},
-  {label:'Features',icon:'⚙️',research:true},
-  {label:'QA',icon:'🔍',research:false},
-  {label:'Polish',icon:'✨',research:false},
-  {label:'Juridik',icon:'⚖️',research:false},
-  {label:'Launch',icon:'🚀',research:false},
-  {label:'Marknad',icon:'📣',research:true},
-  {label:'SEO',icon:'🔎',research:true},
-  {label:'Growth',icon:'📈',research:true}
-];
-
-function makeMS(preset){
-  return DEF_MS.map((m,i)=>({
-    id:gid(),label:m.label,icon:m.icon,research:m.research,
-    status:preset==='live'?(i<=7?'done':i===8?'active':'upcoming'):'upcoming'
-  }));
-}
-
+const SK='km_cmd7';function gid(){return Math.random().toString(36).slice(2,8)}
+// ═══ MS TEMPLATES ═══
+const MS_T={planering:[{l:'Idé-validering',i:'💡',r:1},{l:'Research',i:'🔬',r:1},{l:'Konkurrenter',i:'🕵️',r:1},{l:'Design',i:'🎨',r:1},{l:'Affärsmodell',i:'💰',r:1},{l:'Tech-val',i:'⚙️',r:0},{l:'Redo',i:'✅',r:0}],bygger:[{l:'Research',i:'🔬',r:1},{l:'Design',i:'🎨',r:1},{l:'Bygg',i:'🔨',r:0},{l:'Mer Features',i:'⚙️',r:1},{l:'QA',i:'🔍',r:0},{l:'Polish',i:'✨',r:0},{l:'Juridik',i:'⚖️',r:0},{l:'SEO',i:'🔎',r:1},{l:'Launch',i:'🚀',r:0},{l:'Growth',i:'📈',r:1}],aktiv:[{l:'SEO',i:'🔎',r:1},{l:'Content',i:'✍️',r:1},{l:'Marknad',i:'📣',r:1},{l:'Ads',i:'📢',r:1},{l:'Automation',i:'🤖',r:0},{l:'Optimering',i:'🔧',r:1},{l:'Skalning',i:'📈',r:1}],parkerad:[]};
+function mkMS(s){return(MS_T[s]||MS_T.bygger).map(m=>({id:gid(),label:m.l,icon:m.i,research:!!m.r,status:'upcoming'}))}
+function isBiz(p){return p.type==='Företag Stort'||p.type==='Företag Litet'}
+function isPers(p){return p.type==='Personlig App'||p.type==='Personligt'}
 const DEF_P=[
-  {id:gid(),name:'TS',type:'Företag Stort',status:'bygger',prio:3,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'DamSmycken',type:'Företag Stort',status:'bygger',prio:3,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Nexioo',type:'Företag Stort',status:'planering',prio:2,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'ApexForm',type:'Företag Stort',status:'planering',prio:2,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Byyt',type:'Företag Litet',status:'aktiv',prio:1,version:'V1.0',milestones:makeMS('live')},
-  {id:gid(),name:'Flyg Billig',type:'Företag Litet',status:'planering',prio:1,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'SFX',type:'Företag Litet',status:'planering',prio:1,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Flyyt',type:'Företag Stort',status:'parkerad',prio:0,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Oze Shoppen',type:'Företag Litet',status:'parkerad',prio:0,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Potensshoppen',type:'Företag Litet',status:'parkerad',prio:0,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Superapp',type:'Personlig App',status:'planering',prio:2,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'GYM 3',type:'Personlig App',status:'planering',prio:1,version:'V0.1',milestones:makeMS('fresh')},
-  {id:gid(),name:'Dashboard Företag',type:'Personlig App',status:'planering',prio:1,version:'V0.1',milestones:makeMS('fresh')},
-];
-
-function load(){try{const d=JSON.parse(localStorage.getItem(SK));if(d?.projects?.[0]?.milestones)return d}catch(e){}return{projects:DEF_P}}
-function save(){localStorage.setItem(SK,JSON.stringify(D))}
-let D=load();
-
+  {id:gid(),name:'TS',type:'Företag Stort',status:'bygger',prio:3,version:'V0.1',milestones:mkMS('bygger')},{id:gid(),name:'DamSmycken',type:'Företag Stort',status:'bygger',prio:3,version:'V0.1',milestones:mkMS('bygger')},{id:gid(),name:'Nexioo',type:'Företag Stort',status:'planering',prio:2,version:'V0.1',milestones:mkMS('planering')},{id:gid(),name:'ApexForm',type:'Företag Stort',status:'planering',prio:2,version:'V0.1',milestones:mkMS('planering')},{id:gid(),name:'Byyt',type:'Företag Litet',status:'aktiv',prio:1,version:'V1.0',milestones:mkMS('aktiv')},{id:gid(),name:'Flyg Billig',type:'Företag Litet',status:'planering',prio:1,version:'V0.1',milestones:mkMS('planering')},{id:gid(),name:'SFX',type:'Företag Litet',status:'planering',prio:1,version:'V0.1',milestones:mkMS('planering')},{id:gid(),name:'Flyyt',type:'Företag Stort',status:'parkerad',prio:0,version:'V0.1',milestones:mkMS('bygger')},{id:gid(),name:'Oze Shoppen',type:'Företag Litet',status:'parkerad',prio:0,version:'V0.1',milestones:mkMS('bygger')},{id:gid(),name:'Potensshoppen',type:'Företag Litet',status:'parkerad',prio:0,version:'V0.1',milestones:mkMS('bygger')},{id:gid(),name:'Superapp',type:'Personlig App',status:'planering',prio:2,version:'V0.1',milestones:mkMS('planering')},{id:gid(),name:'GYM 3',type:'Personlig App',status:'planering',prio:1,version:'V0.1',milestones:mkMS('planering')},{id:gid(),name:'Dashboard Företag',type:'Personlig App',status:'planering',prio:1,version:'V0.1',milestones:mkMS('planering')}];
+function load(){try{const d=JSON.parse(localStorage.getItem(SK));if(d?.projects)return d}catch(e){}return{projects:DEF_P,personal:[]}}
+function saveLocal(){localStorage.setItem(SK,JSON.stringify(D))}
+let D=load();if(!D.personal)D.personal=[];
+// ═══ SUPABASE ═══
+const SB_URL='https://fpcmzorgfhdsqitmnhpn.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwY216b3JnZmhkc3FpdG1uaHBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MTYyNTUsImV4cCI6MjA5MDM5MjI1NX0.ERVLiXBo9kRnx_NGfBCnWzEyK6yc2SAZofsZIeyUohA';
+const sb=window.supabase.createClient(SB_URL,SB_KEY);let syncing=false;
+async function loadDB(){try{const{data}=await sb.from('dashboard_data').select('data').eq('id','km_main').single();if(data?.data?.projects)return data.data}catch(e){}return null}
+async function saveToDB(){if(syncing)return;syncing=true;try{await sb.from('dashboard_data').upsert({id:'km_main',data:D,updated_at:new Date().toISOString()})}catch(e){}syncing=false}
+function save(){saveLocal();saveToDB()}
+(async()=>{const r=await loadDB();if(r?.projects?.length){D=r;if(!D.personal)D.personal=[];saveLocal();renderAll()}})();
+document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'){const r=await loadDB();if(r?.projects?.length){D=r;if(!D.personal)D.personal=[];saveLocal();renderAll()}}});
 function toast(m,t='ok'){const d=document.createElement('div');d.className='toast '+t;d.textContent=m;document.getElementById('toasts').appendChild(d);setTimeout(()=>d.remove(),2200)}
-
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('.tab-btn');if(!b)return;document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tp').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+b.dataset.t).classList.add('active')};
-
 function openM(h){document.getElementById('mc').innerHTML=h;document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden'}
 function closeM(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
-
-const ST_CFG={
-  aktiv:{label:'AKTIV',color:'#10B981',desc:'Live & tillväxt'},
-  bygger:{label:'BYGGER',color:'#F59E0B',desc:'Aktiv kodning'},
-  planering:{label:'PLANERING',color:'#6366f1',desc:'Research & design'},
-  parkerad:{label:'PARKERAD',color:'rgba(255,255,255,0.25)',desc:'Pausad'}
-};
+// ═══ STATS ═══
+const ST_CFG={aktiv:{label:'AKTIV',color:'#10B981'},bygger:{label:'BYGGER',color:'#F59E0B'},planering:{label:'PLANERING',color:'#6366f1'},parkerad:{label:'PARKERAD',color:'rgba(255,255,255,0.25)'}};
 const ST_ORD=['aktiv','bygger','planering','parkerad'];
-
-function renderStats(){
-  const c={};ST_ORD.forEach(s=>c[s]=0);
-  D.projects.forEach(p=>c[p.status]=(c[p.status]||0)+1);
-  const td=D.projects.reduce((s,p)=>s+p.milestones.filter(m=>m.status==='done').length,0);
-  const ta=D.projects.reduce((s,p)=>s+p.milestones.length,0);
-  document.getElementById('stats').innerHTML=`<span><b>${c.aktiv+c.bygger}</b> aktiva</span><span><b>${td}</b>/<b>${ta}</b> steg</span>`;
-}
-
-function renderProjects(){
-  const el=document.getElementById('proj-list');
-  let h='';
-  ST_ORD.forEach(sk=>{
-    const cfg=ST_CFG[sk];
-    const items=D.projects.filter(p=>p.status===sk).sort((a,b)=>b.prio-a.prio);
-    if(!items.length)return;
-    h+=`<div class="grp"><div class="grp-title"><div class="dot" style="background:${cfg.color}"></div><span style="color:${cfg.color}">${cfg.label}</span><span class="cnt">${items.length}</span><span style="color:var(--t2);font-size:10px;text-transform:none;letter-spacing:0">${cfg.desc}</span></div>`;
-
-    items.forEach(p=>{
-      const done=p.milestones.filter(m=>m.status==='done').length;
-      const total=p.milestones.length;
-      let dots='';for(let i=0;i<3;i++)dots+=`<i class="${i<p.prio?'':'off'}"></i>`;
-      const activeM=p.milestones.find(m=>m.status==='active');
-
-      h+=`<div class="prow">
-        <div class="prow-top">
-          <div class="prow-info">
-            <h3>${p.name}<button class="edit-btn" onclick="openPM('${p.id}')" aria-label="Redigera">✏️</button></h3>
-            <div class="prow-meta">
-              <span class="b b-type">${p.type}</span>
-              <div class="prio-dots">${dots}</div>
-              <span class="ver">${p.version}</span>
-              <span class="prog-text">${done}/${total}</span>
-            </div>
-          </div>
-        </div>
-        <div class="tl-scroll">
-          <div class="tl">`;
-
-      p.milestones.forEach((m,i)=>{
-        let lineCls='';
-        if(i>0){
-          const prev=p.milestones[i-1];
-          if(prev.status==='done'&&m.status==='done')lineCls='done-line';
-          else if(prev.status==='done'&&m.status==='active')lineCls='active-line';
-        }
-        const needsRes=m.research&&m.status!=='done';
-
-        h+=`<div class="tl-step">
-          <div class="tl-node">
-            ${i>0?`<div class="tl-line ${lineCls}"></div>`:''}
-            <div class="tl-dot ${m.status}" onclick="cycleMS('${p.id}',${i})" aria-label="${m.label}: ${m.status}">
-              ${m.status==='done'?'✓':m.status==='active'?'►':''}
-            </div>
-          </div>
-          <div class="tl-lbl ${m.status}">${m.label}</div>
-          <div class="tl-res">${needsRes?'🔬':''}</div>
-        </div>`;
-      });
-
-      h+=`</div></div></div>`;
-    });
-    h+='</div>';
-  });
+function renderStats(){const pr=D.personal.filter(p=>!p.archived).length;document.getElementById('stats').innerHTML=`<span><b>${D.projects.filter(isBiz).length}</b> företag</span><span><b>${D.projects.filter(isPers).length}</b> pers</span><span><b>${pr}</b> privat</span>`}
+// ═══ FÖRETAG/PERSONLIGT TAB ═══
+function renderProjList(elId,fn){const el=document.getElementById(elId);let h='';ST_ORD.forEach(sk=>{const cfg=ST_CFG[sk];const items=D.projects.filter(fn).filter(p=>p.status===sk).sort((a,b)=>b.prio-a.prio);if(!items.length)return;h+=`<div class="grp"><div class="grp-hdr"><div class="d" style="background:${cfg.color}"></div><span style="color:${cfg.color}">${cfg.label}</span><span class="c">${items.length}</span></div>`;items.forEach(p=>{const dn=p.milestones.filter(m=>m.status==='done').length,tt=p.milestones.length;let dots='';for(let i=0;i<3;i++)dots+=`<i class="${i<p.prio?'':'off'}"></i>`;h+=`<div class="prow"><div class="prow-top"><div class="prow-info"><h3>${p.name}<button class="edit-btn" onclick="openPM('${p.id}')">✏️</button></h3><div class="prow-meta"><span class="b b-type">${p.type}</span><div class="prio-dots">${dots}</div><span class="ver">${p.version}</span><span class="prog-text">${dn}/${tt}</span></div></div></div><div class="tl-s"><div class="tl">`;p.milestones.forEach((m,i)=>{let lc='';if(i>0){const pv=p.milestones[i-1];if(pv.status==='done'&&m.status==='done')lc='done-l';else if(pv.status==='done'&&m.status==='active')lc='act-l'}const nr=m.research&&m.status!=='done';if(i>0)h+=`<div class="ins"><button class="ins-btn" onclick="event.stopPropagation();addMSAt('${p.id}',${i})">+</button></div>`;h+=`<div class="tl-step"><div class="tl-node">${i>0?`<div class="ln ${lc}"></div>`:''}
+<div class="dot ${m.status}" onclick="cycleMS('${p.id}','${m.id}')">${m.status==='done'?'✓':m.status==='active'?'►':''}</div></div><div class="lbl ${m.status}">${m.label}</div><div class="tl-res">${nr?'🔬':''}</div></div>`});h+=`<div class="ins" style="margin-left:2px"><button class="ins-btn" onclick="event.stopPropagation();addMSAt('${p.id}',${p.milestones.length})">+</button></div></div></div></div>`});h+='</div>'});el.innerHTML=h}
+function cycleMS(pid,mid){const p=D.projects.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;m.status={upcoming:'active',active:'done',done:'upcoming'}[m.status]||'upcoming';save();renderAll()}
+const ICONS=['📋','🔬','🎨','🔨','⚙️','🔍','✨','⚖️','🔎','🚀','📈','📣','🤖','💰','📱','💬','📸','✍️','🎯','📦','🔗','📊','📢','🔧','🕵️','💡','✅','🛒','🏠','📖','💪','🔒','📍','🧴','🔄'];
+function iconPicker(targetId){return ICONS.map(c=>`<button class="btn-ghost" style="min-width:42px;min-height:42px;padding:4px;font-size:18px;border-radius:8px" onclick="document.getElementById('${targetId}').value='${c}';document.querySelectorAll('#ip-${targetId} button').forEach(b=>b.style.borderColor='');this.style.borderColor='var(--pri)'">${c}</button>`).join('')}
+function addMSAt(pid,pos){openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>Ny milstolpe</h2><label>Namn</label><input id="ms-n" autofocus><label>Ikon</label><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px" id="ip-iv">${iconPicker('iv')}</div><input type="hidden" id="iv" value="📋"><label style="margin-top:12px;display:flex;align-items:center;gap:8px"><input type="checkbox" id="mr" style="width:20px;height:20px;flex-shrink:0"><span>🔬 Research</span></label><div class="modal-btns"><button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="doAddMS('${pid}',${pos})">Lägg till</button></div>`)}
+function doAddMS(pid,pos){const n=document.getElementById('ms-n').value.trim();if(!n)return toast('Namn','err');const p=D.projects.find(x=>x.id===pid);if(!p)return;p.milestones.splice(pos,0,{id:gid(),label:n,icon:document.getElementById('iv').value||'📋',research:document.getElementById('mr').checked,status:'upcoming'});save();closeM();renderAll();toast('Tillagd ✅')}
+function openPM(id,defTab){const p=id?D.projects.find(x=>x.id===id):null;const sv=v=>p&&p.status===v?'selected':'';const tv=v=>{if(p)return p.type===v?'selected':'';return defTab==='personal'&&v==='Personlig App'?'selected':''};let ms='';if(p){ms='<label>Milstolpar</label><div class="ms-list">';p.milestones.forEach(m=>{ms+=`<div class="ms-item"><span>${m.status==='done'?'✅':m.status==='active'?'🔄':'⬜'}</span><span class="ms-name">${m.icon} ${m.label}</span><button class="ms-del" onclick="rmMS('${p.id}','${m.id}')">✕</button></div>`});ms+='</div>'}
+openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>${p?'Redigera':'Nytt'} projekt</h2><label>Namn</label><input id="f-n" value="${p?p.name:''}"><div class="row2"><div><label>Typ</label><select id="f-t"><option ${tv('Företag Stort')}>Företag Stort</option><option ${tv('Företag Litet')}>Företag Litet</option><option ${tv('Personlig App')}>Personlig App</option><option ${tv('Personligt')}>Personligt</option></select></div><div><label>Status</label><select id="f-s"><option value="planering" ${sv('planering')}>🟣 Planering</option><option value="bygger" ${sv('bygger')}>🟠 Bygger</option><option value="aktiv" ${sv('aktiv')}>🟢 Aktiv</option><option value="parkerad" ${sv('parkerad')}>⚪ Parkerad</option></select></div></div><div class="row2"><div><label>Prio (0-3)</label><input type="number" id="f-p" min="0" max="3" value="${p?p.prio:2}" inputmode="numeric"></div><div><label>Version</label><input id="f-v" value="${p?p.version:'V0.1'}"></div></div>${ms}<div class="modal-btns">${p?`<button class="btn btn-danger" onclick="delP('${p.id}')">Ta bort</button>`:''}<button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="saveP('${id||''}')">${p?'Spara':'Skapa'}</button></div>`)}
+function rmMS(pid,mid){const p=D.projects.find(x=>x.id===pid);if(!p||p.milestones.length<=1)return;p.milestones=p.milestones.filter(m=>m.id!==mid);save();openPM(pid);toast('Borttagen')}
+function saveP(id){const n=document.getElementById('f-n').value.trim();if(!n)return toast('Namn','err');const ns=document.getElementById('f-s').value;if(id){const p=D.projects.find(x=>x.id===id);if(p){const os=p.status;p.name=n;p.type=document.getElementById('f-t').value;p.status=ns;p.prio=+document.getElementById('f-p').value||0;p.version=document.getElementById('f-v').value;if(os!==ns&&ns!=='parkerad'&&confirm('Byta milstolpar till ny mall?'))p.milestones=mkMS(ns)}}else D.projects.push({id:gid(),name:n,type:document.getElementById('f-t').value,status:ns,prio:+document.getElementById('f-p').value||0,version:document.getElementById('f-v').value,milestones:mkMS(ns)});save();closeM();renderAll();toast(id?'Sparat ✅':'Skapat ✅')}
+function delP(id){if(!confirm('Ta bort?'))return;D.projects=D.projects.filter(p=>p.id!==id);save();closeM();renderAll();toast('Borttaget')}
+// ═══ PRIVAT TAB ═══
+let xProj=null,xStep=null;
+const TIER={1:{label:'+ SNABBT',color:'var(--cyan)',cls:'t1',desc:'Idag/imorgon'},2:{label:'++ VECKA',color:'var(--lila)',cls:'t2',desc:'Tar en vecka'},3:{label:'+++ LÅNGTID',color:'var(--gul)',cls:'t3',desc:'Veckor/månader'}};
+function dlFmt(d){if(!d)return'';const t=new Date(d),n=new Date(),diff=Math.ceil((t-n)/(864e5));const mo=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];if(diff<0)return`<span class="dl-tag over">${-diff}d sen</span>`;if(diff===0)return'<span class="dl-tag soon">Idag</span>';if(diff===1)return'<span class="dl-tag soon">Imorgon</span>';if(diff<=7)return`<span class="dl-tag soon">${diff}d</span>`;return`<span class="dl-tag">${t.getDate()} ${mo[t.getMonth()]}</span>`}
+function renderPrivat(){
+  const el=document.getElementById('priv-list');let h='';
+  [1,2,3].forEach(tier=>{const cfg=TIER[tier];const items=D.personal.filter(p=>p.tier===tier&&!p.archived);if(!items.length)return;
+    h+=`<div class="grp"><div class="grp-hdr"><div class="d" style="background:${cfg.color}"></div><span style="color:${cfg.color}">${cfg.label}</span><span class="c">${items.length}</span><span style="color:var(--t2);font-size:10px;text-transform:none;letter-spacing:0">${cfg.desc}</span></div>`;
+    items.forEach(p=>{const dn=p.milestones.filter(m=>m.status==='done').length,tt=p.milestones.length,pct=tt?Math.round(dn/tt*100):0;
+      const isExp=xProj===p.id;const tc=TIER[p.tier];const budgetLeft=p.budget?(p.budget-(p.spent||0)):0;
+      h+=`<div class="prow"><div class="priv-head" onclick="togglePriv('${p.id}')"><div class="priv-head-c"><h3>${p.name} <span class="tier ${tc.cls}">${'+'.repeat(p.tier)}</span><button class="edit-btn" onclick="event.stopPropagation();openPrivM('${p.id}')">✏️</button></h3><div class="priv-row2"><div class="priv-left"><span class="b b-type">${p.category||''}</span>${dlFmt(p.deadline)}</div><div class="priv-right">${p.budget?`<span class="budget">💰 <b>${budgetLeft}</b>/${p.budget} kr</span>`:''}<span class="prog-text">${dn}/${tt}</span></div></div></div><div class="chev${isExp?' open':''}">${isExp?'▴':'▾'}</div></div>`;
+      if(isExp){
+        h+=`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${tc.color}"></div></div><div class="tl-w"><div class="tl">`;
+        p.milestones.forEach((m,i)=>{let lc='';if(i>0){const pv=p.milestones[i-1];if(pv.status==='done'&&m.status==='done')lc='done-l';else if(pv.status==='done'&&m.status==='active')lc='act-l'}
+          if(i>0)h+=`<div class="ins"><button class="ins-btn" onclick="event.stopPropagation();addPrivMS('${p.id}',${i})">+</button></div>`;
+          const isSel=xStep===m.id;
+          h+=`<div class="tl-step"><div class="tl-node">${i>0?`<div class="ln ${lc}"></div>`:''}
+            <div class="dot ${m.status}${isSel?' sel':''}" onclick="event.stopPropagation();toggleStep('${p.id}','${m.id}')">${m.status==='done'?'✓':m.status==='active'?'►':''}</div></div>
+            <div class="lbl ${m.status}">${m.label}</div>${m.deadline?`<div class="tl-dl${dlNear(m.deadline)?' soon':''}">${shortDl(m.deadline)}</div>`:''}</div>`});
+        h+=`<div class="ins" style="margin-left:2px"><button class="ins-btn" onclick="event.stopPropagation();addPrivMS('${p.id}',${p.milestones.length})">+</button></div></div></div>`;
+        // Expanded step panel
+        if(xStep){const ms=p.milestones.find(m=>m.id===xStep);if(ms){
+          if(!ms.checklist)ms.checklist=[];if(!ms.links)ms.links=[];
+          const ckDone=ms.checklist.filter(c=>c.done).length;
+          h+=`<div class="step-panel"><div class="sp-head"><h4>${ms.icon||'📋'} ${ms.label}</h4><div style="display:flex;gap:6px;align-items:center">${ms.deadline?`<span class="dl-tag">${shortDl(ms.deadline)}</span>`:''}
+            <button class="edit-btn" onclick="event.stopPropagation();cyclePrivMS('${p.id}','${ms.id}')" title="Ändra status" style="font-size:14px">${ms.status==='done'?'✅':ms.status==='active'?'🔄':'⬜'}</button></div></div>`;
+          // Checklist
+          h+=`<div class="sp-sec"><div class="sp-label">☑️ Checklista ${ms.checklist.length?ckDone+'/'+ms.checklist.length:''}</div>`;
+          ms.checklist.forEach(c=>{h+=`<div class="ck"><div class="ck-box${c.done?' on':''}" onclick="event.stopPropagation();toggleCk('${p.id}','${ms.id}','${c.id}')">${c.done?'✓':''}</div><span class="ck-txt${c.done?' on':''}">${esc(c.text)}</span><button class="ck-del" onclick="event.stopPropagation();delCk('${p.id}','${ms.id}','${c.id}')">✕</button></div>`});
+          h+=`<div class="ck-add"><input id="ck-inp-${ms.id}" placeholder="Ny punkt..." onkeydown="if(event.key==='Enter'){event.preventDefault();addCk('${p.id}','${ms.id}')}"><button onclick="addCk('${p.id}','${ms.id}')">+</button></div></div>`;
+          // Notes
+          h+=`<div class="sp-sec"><div class="sp-label">📝 Anteckningar</div><textarea class="sp-notes" id="nt-${ms.id}" onblur="saveNotes('${p.id}','${ms.id}')" placeholder="Skriv anteckningar...">${esc(ms.notes||'')}</textarea></div>`;
+          // Links
+          h+=`<div class="sp-sec"><div class="sp-label">🔗 Länkar</div>`;
+          ms.links.forEach(l=>{h+=`<div class="lk"><span style="color:rgba(255,255,255,0.15)">🔗</span><a href="${esc(l.url)}" target="_blank">${esc(l.title||l.url)}</a><button class="ck-del" onclick="event.stopPropagation();delLink('${p.id}','${ms.id}','${l.id}')">✕</button></div>`});
+          h+=`<div class="lk-add"><input id="lk-inp-${ms.id}" placeholder="URL..." onkeydown="if(event.key==='Enter'){event.preventDefault();addLink('${p.id}','${ms.id}')}"><button onclick="addLink('${p.id}','${ms.id}')">🔗</button></div></div>`;
+          h+=`</div>`;
+        }}
+      }
+      h+=`</div>`;
+    });h+='</div>'});
+  // Archived
+  const arch=D.personal.filter(p=>p.archived);
+  if(arch.length){h+=`<div class="grp arch-grp"><div class="grp-hdr"><div class="d" style="background:rgba(255,255,255,0.15)"></div><span style="color:var(--t2)">✅ ARKIVERADE</span><span class="c">${arch.length}</span></div>`;
+    arch.forEach(p=>{h+=`<div class="prow"><div class="priv-head" onclick="unarchPriv('${p.id}')"><div class="priv-head-c"><h3>${p.name} <span class="tier ${TIER[p.tier]?.cls||'t1'}">${'+'.repeat(p.tier)}</span></h3><div class="priv-row2"><div class="priv-left"><span class="dl-tag ok">✅ Klar</span></div></div></div><div class="chev">↩</div></div></div>`});h+='</div>'}
   el.innerHTML=h;
 }
-
-function cycleMS(pid,idx){
-  const p=D.projects.find(x=>x.id===pid);if(!p)return;
-  const m=p.milestones[idx];
-  const c={upcoming:'active',active:'done',done:'upcoming'};
-  m.status=c[m.status]||'upcoming';
-  save();renderAll();
-}
-
-function openPM(id){
-  const p=id?D.projects.find(x=>x.id===id):null;
-  const sv=v=>p&&p.status===v?'selected':'';
-  const tv=v=>p&&p.type===v?'selected':'';
-  openM(`<button class="modal-close" onclick="closeM()">✕</button>
-    <h2>${p?'Redigera':'Nytt'} projekt</h2>
-    <label>Namn</label><input id="f-n" value="${p?p.name:''}">
-    <div class="row2">
-      <div><label>Typ</label><select id="f-t"><option ${tv('Företag Stort')}>Företag Stort</option><option ${tv('Företag Litet')}>Företag Litet</option><option ${tv('Personlig App')}>Personlig App</option><option ${tv('Personligt')}>Personligt</option></select></div>
-      <div><label>Status</label><select id="f-s"><option value="aktiv" ${sv('aktiv')}>🟢 Aktiv</option><option value="bygger" ${sv('bygger')}>🟠 Bygger</option><option value="planering" ${sv('planering')}>🟣 Planering</option><option value="parkerad" ${sv('parkerad')}>⚪ Parkerad</option></select></div>
-    </div>
-    <div class="row2">
-      <div><label>Prioritet (0-3)</label><input type="number" id="f-p" min="0" max="3" value="${p?p.prio:2}" inputmode="numeric"></div>
-      <div><label>Version</label><input id="f-v" value="${p?p.version:'V0.1'}"></div>
-    </div>
-    <div class="modal-btns">
-      ${p?`<button class="btn btn-danger" onclick="delP('${p.id}')">Ta bort</button>`:''}
-      <button class="btn btn-ghost" onclick="closeM()">Avbryt</button>
-      <button class="btn btn-pri" onclick="saveP('${id||''}')">Spara</button>
-    </div>`);
-}
-
-function saveP(id){
-  const n=document.getElementById('f-n').value.trim();
-  if(!n){toast('Namn saknas','err');return}
-  if(id){
-    const p=D.projects.find(x=>x.id===id);
-    if(p){p.name=n;p.type=document.getElementById('f-t').value;p.status=document.getElementById('f-s').value;p.prio=+document.getElementById('f-p').value||0;p.version=document.getElementById('f-v').value}
-  }else{
-    D.projects.push({id:gid(),name:n,type:document.getElementById('f-t').value,status:document.getElementById('f-s').value,prio:+document.getElementById('f-p').value||0,version:document.getElementById('f-v').value,milestones:makeMS('fresh')});
-  }
-  save();closeM();renderAll();toast(id?'Uppdaterat ✅':'Tillagt ✅');
-}
-
-function delP(id){if(!confirm('Ta bort projektet?'))return;D.projects=D.projects.filter(p=>p.id!==id);save();closeM();renderAll();toast('Borttaget')}
-
-// STEG DATA
-const STEG=[
-  {cat:'🏗️ Grund',items:[
-    {n:'1',name:'Bas',icon:'📋',desc:'Grundinställningar för varje Claude Project.',when:'Alltid — grundprompt'},
-    {n:'2',name:'Idé-Vault',icon:'💡',desc:'Analyserar idéer: 8 kriterier, poäng /40, godkänn/parkera.',when:'Ny idé dyker upp',modes:['Snabbkoll','Djupanalys','Brainstorm']},
-    {n:'3',name:'Nytt Projekt',icon:'🚀',desc:'Affärsmodell → namn → roadmap → filstruktur → handover.',when:'Idé godkänd i Steg 2'}
-  ]},
-  {cat:'🔨 Bygga',items:[
-    {n:'4',name:'VD Projekt',icon:'👔',desc:'Äger ETT projekts roadmap, planerar versioner.',when:'Varje session med ett projekt'},
-    {n:'5',name:'VD Kod',icon:'💻',desc:'Bygger kod version för version. En chatt = en version.',when:'Kodning'},
-    {n:'6',name:'Cowork',icon:'🤝',desc:'Claude Desktop — filåtkomst + Computer Use.',when:'Läsa/skriva filer direkt'}
-  ]},
-  {cat:'✅ Kvalitet',items:[
-    {n:'7',name:'QA',icon:'🔍',desc:'10 testområden: fil, JS, CSS, flöde, mobil, säkerhet, SEO.',when:'Före V1.0, efter stora ändringar'},
-    {n:'8',name:'Design Polish',icon:'🎨',desc:'16 områden — "funkar" till Meta-nivå.',when:'Före launch'},
-    {n:'—',name:'Redesign',icon:'🔄',desc:'Omdesign med nytt designsystem.',when:'Nytt utseende'},
-    {n:'—',name:'Röntgen',icon:'🔬',desc:'Djupanalys av sajts tekniska kvalitet.',when:'Analysera sajt'}
-  ]},
-  {cat:'🧰 Specialister',items:[
-    {n:'9',name:'Automation',icon:'🤖',desc:'Python-scripts, IG-bots, email, scrapers.',when:'Automatisera',modes:['IG-bot','Email','Scraper','Cron']},
-    {n:'10',name:'Produktfoto',icon:'📸',desc:'Shot lists, ljussättning, redigering.',when:'Produktbilder'},
-    {n:'11',name:'Copywriter',icon:'✍️',desc:'Text som säljer: landing pages, email, ads.',when:'Konverterande text',modes:['Landing','Produkt','Email','Caption','Ads','DM']},
-    {n:'12',name:'Sälj-Coach',icon:'💼',desc:'Cold email, LinkedIn, invändningar, rollspel.',when:'B2B, kundsamtal',modes:['Cold email','LinkedIn','Rollspel','Pris']}
-  ]},
-  {cat:'📣 Tillväxt',items:[
-    {n:'13',name:'SEO',icon:'🔎',desc:'Nyckelord, on-page, teknisk SEO, content-plan.',when:'Post-launch V1.1+'},
-    {n:'14',name:'Social Media',icon:'📱',desc:'Content-kalender, hashtags, engagement-rutin.',when:'Veckovis content'},
-    {n:'15',name:'Konkurrent-Spy',icon:'🕵️',desc:'7-stegs dissekering av konkurrenter.',when:'Analysera konkurrent',modes:['Full spy','Snabb spy','Bevakning']},
-    {n:'19',name:'Telegram',icon:'💬',desc:'Content, schema, tillväxt för Telegram.',when:'TS/Potens Telegram'}
-  ]},
-  {cat:'📊 Analys & Personligt',items:[
-    {n:'16',name:'Reflektion',icon:'🧘',desc:'Veckoreflektion: energi, vinster, hälsa.',when:'Söndagar'},
-    {n:'17',name:'Ekonomi',icon:'💰',desc:'Månadsöversikt, break-even, ROI.',when:'Månatlig'},
-    {n:'18',name:'Karriär',icon:'🎯',desc:'Intervju-prep, lön, LinkedIn.',when:'Jobbsökning'},
-    {n:'20',name:'Juridik',icon:'⚖️',desc:'GDPR, policy, cookies, disclaimers.',when:'Före launch'}
-  ]},
-  {cat:'🚁 Överblick',items:[
-    {n:'21',name:'Helikopter-VD',icon:'🚁',desc:'Alla projekt. Max 2-3/vecka. Block-schema.',when:'Måndag + fredag'},
-    {n:'22',name:'Handover',icon:'📄',desc:'Dokumenterar allt om ett projekt.',when:'V1.0, stora ändringar'}
-  ]},
-  {cat:'🔬 Research',items:[
-    {n:'R1',name:'Strategi',icon:'🔬',desc:'Validera idé, konkurrenter, approach.',when:'INNAN du bygger',modes:['/projekt','/konkurrent','/pris','/tech','/trend','/all']},
-    {n:'R2',name:'Marknad',icon:'📡',desc:'VEM köper, VAR du når dem.',when:'Förstå målgrupp',modes:['/målgrupp','/kanal','/seo','/ads','/social','/all']},
-    {n:'R3',name:'Design & Kod',icon:'🎨',desc:'HUR det ska se ut och byggas.',when:'Design/kod-beslut',modes:['/ui','/ux','/kod','/compliance','/all']},
-    {n:'R4',name:'Tillväxt',icon:'🚀',desc:'Skalning, growth, retention.',when:'Post-launch'},
-    {n:'R5',name:'Personlig',icon:'🧠',desc:'Produktivitet, hälsa, mindset.',when:'Personliga mål'}
-  ]}
-];
-
-const FLOW=['💡 Idé','→','🔬 Research','→','🚀 Skapa','→','🔨 Bygg','→','🔍 QA','→','✨ Polish','→','⚖️ Juridik','→','🚀 Launch','→','📈 Tillväxt'];
-
-function renderSteg(){
-  const q=(document.getElementById('steg-search')?.value||'').toLowerCase();
-  document.getElementById('steg-flow').innerHTML=FLOW.map(s=>s==='→'?'<span class="arr">→</span>':`<span class="sf">${s}</span>`).join('');
-  let h='';
-  STEG.forEach(cat=>{
-    const f=cat.items.filter(i=>!q||(i.name+i.desc+i.when+(i.modes||[]).join('')).toLowerCase().includes(q));
-    if(!f.length)return;
-    h+=`<div class="steg-cat"><h3 onclick="this.parentElement.classList.toggle('collapsed')">${cat.cat}</h3><div class="steg-body">`;
-    f.forEach(i=>{
-      h+=`<div class="steg-item">
-        <strong>${i.icon} ${i.n!=='—'?'Steg '+i.n+': ':''}${i.name}</strong>
-        <div class="desc">${i.desc}</div>
-        <div class="when">📌 ${i.when}</div>
-        ${i.modes?`<div class="modes">${i.modes.map(m=>`<span class="mode-tag">${m}</span>`).join('')}</div>`:''}
-      </div>`;
-    });
-    h+='</div></div>';
-  });
-  document.getElementById('steg-list').innerHTML=h;
-}
-
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function dlNear(d){if(!d)return false;return Math.ceil((new Date(d)-new Date())/(864e5))<=3}
+function shortDl(d){if(!d)return'';const t=new Date(d),mo=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];return t.getDate()+' '+mo[t.getMonth()]}
+function togglePriv(id){xProj=xProj===id?null:id;xStep=null;renderPrivat()}
+function toggleStep(pid,mid){const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;xStep=xStep===mid?null:mid;renderPrivat()}
+function cyclePrivMS(pid,mid){const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;m.status={upcoming:'active',active:'done',done:'upcoming'}[m.status]||'upcoming';save();renderPrivat()}
+// Checklist
+function toggleCk(pid,mid,cid){const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;const c=m.checklist.find(x=>x.id===cid);if(c){c.done=!c.done;save();renderPrivat()}}
+function addCk(pid,mid){const inp=document.getElementById('ck-inp-'+mid);if(!inp)return;const t=inp.value.trim();if(!t)return;const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;m.checklist.push({id:gid(),text:t,done:false});save();renderPrivat();setTimeout(()=>{const el=document.getElementById('ck-inp-'+mid);if(el)el.focus()},50)}
+function delCk(pid,mid,cid){const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;m.checklist=m.checklist.filter(c=>c.id!==cid);save();renderPrivat()}
+// Notes
+function saveNotes(pid,mid){const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;const el=document.getElementById('nt-'+mid);if(el)m.notes=el.value;save()}
+// Links
+function addLink(pid,mid){const inp=document.getElementById('lk-inp-'+mid);if(!inp)return;const url=inp.value.trim();if(!url)return;const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;let title=url.replace(/^https?:\/\//,'').split('/')[0];m.links.push({id:gid(),title,url:url.startsWith('http')?url:'https://'+url});save();renderPrivat()}
+function delLink(pid,mid,lid){const p=D.personal.find(x=>x.id===pid);if(!p)return;const m=p.milestones.find(x=>x.id===mid);if(!m)return;m.links=m.links.filter(l=>l.id!==lid);save();renderPrivat()}
+// Add milestone to personal project
+function addPrivMS(pid,pos){openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>Ny milstolpe</h2><label>Namn</label><input id="pm-n" autofocus><label>Deadline (valfri)</label><input type="date" id="pm-dl"><div class="modal-btns"><button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="doAddPrivMS('${pid}',${pos})">Lägg till</button></div>`)}
+function doAddPrivMS(pid,pos){const n=document.getElementById('pm-n').value.trim();if(!n)return toast('Namn','err');const p=D.personal.find(x=>x.id===pid);if(!p)return;p.milestones.splice(pos,0,{id:gid(),label:n,status:'upcoming',deadline:document.getElementById('pm-dl').value||'',checklist:[],notes:'',links:[]});save();closeM();renderPrivat();toast('Tillagd ✅')}
+// Create/Edit personal project
+function openPrivM(id){const p=id?D.personal.find(x=>x.id===id):null;
+  let msHtml='';if(p){msHtml='<label>Milstolpar</label><div class="ms-list">';p.milestones.forEach(m=>{msHtml+=`<div class="ms-item"><span>${m.status==='done'?'✅':m.status==='active'?'🔄':'⬜'}</span><span class="ms-name">${m.label}</span><button class="ms-del" onclick="rmPrivMS('${p.id}','${m.id}')">✕</button></div>`});msHtml+='</div>'}
+  openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>${p?'Redigera':'Nytt'} privat projekt</h2>
+    <label>Namn</label><input id="pv-n" value="${p?p.name:''}">
+    <label>Kategori</label><input id="pv-cat" value="${p?p.category:''}" placeholder="Hudvård, Köp, Fitness...">
+    <div class="row2"><div><label>Tier</label><select id="pv-tier"><option value="1" ${p&&p.tier===1?'selected':''}>+ Snabbt</option><option value="2" ${p&&p.tier===2?'selected':''}>++ Vecka</option><option value="3" ${p&&p.tier===3?'selected':''}>+++ Långtid</option></select></div><div><label>Deadline</label><input type="date" id="pv-dl" value="${p?p.deadline||'':''}"></div></div>
+    <div class="row2"><div><label>Budget (kr)</label><input type="number" id="pv-bud" value="${p?p.budget||'':''}" placeholder="0" inputmode="numeric"></div><div><label>Spenderat</label><input type="number" id="pv-spe" value="${p?p.spent||'':''}" placeholder="0" inputmode="numeric"></div></div>
+    ${msHtml}
+    <div class="modal-btns">${p?`<button class="btn btn-danger" onclick="delPriv('${p.id}')">Ta bort</button><button class="btn btn-ghost" onclick="archPriv('${p.id}')">📦 Arkivera</button>`:''}<button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="savePriv('${id||''}')">${p?'Spara':'Skapa'}</button></div>`)}
+function rmPrivMS(pid,mid){const p=D.personal.find(x=>x.id===pid);if(!p||p.milestones.length<=1)return;p.milestones=p.milestones.filter(m=>m.id!==mid);save();openPrivM(pid)}
+function savePriv(id){const n=document.getElementById('pv-n').value.trim();if(!n)return toast('Namn','err');
+  if(id){const p=D.personal.find(x=>x.id===id);if(p){p.name=n;p.category=document.getElementById('pv-cat').value;p.tier=+document.getElementById('pv-tier').value;p.deadline=document.getElementById('pv-dl').value;p.budget=+document.getElementById('pv-bud').value||0;p.spent=+document.getElementById('pv-spe').value||0}}
+  else D.personal.push({id:gid(),name:n,category:document.getElementById('pv-cat').value,tier:+document.getElementById('pv-tier').value,deadline:document.getElementById('pv-dl').value,budget:+document.getElementById('pv-bud').value||0,spent:+document.getElementById('pv-spe').value||0,archived:false,milestones:[{id:gid(),label:'Start',status:'active',deadline:'',checklist:[],notes:'',links:[]}]});
+  save();closeM();renderAll();toast(id?'Sparat ✅':'Skapat ✅')}
+function delPriv(id){if(!confirm('Ta bort?'))return;D.personal=D.personal.filter(p=>p.id!==id);save();closeM();renderAll();toast('Borttaget')}
+function archPriv(id){const p=D.personal.find(x=>x.id===id);if(p){p.archived=true;xProj=null;xStep=null}save();closeM();renderAll();toast('Arkiverat 📦')}
+function unarchPriv(id){const p=D.personal.find(x=>x.id===id);if(p)p.archived=false;save();renderAll();toast('Återställt ↩')}
+// ═══ STEG TAB ═══
+const STEG=[{cat:'🏗️ Grund',items:[{n:'1',name:'Bas',icon:'📋',desc:'Grundinställningar.',when:'Grundprompt'},{n:'2',name:'Idé-Vault',icon:'💡',desc:'Analyserar idéer: 8 kriterier, /40.',when:'Ny idé',modes:['Snabb','Djup','Brainstorm']},{n:'3',name:'Nytt Projekt',icon:'🚀',desc:'Affärsmodell → namn → roadmap.',when:'Idé godkänd'}]},{cat:'🔨 Bygga',items:[{n:'4',name:'VD Projekt',icon:'👔',desc:'Äger roadmap, planerar versioner.',when:'Varje session'},{n:'5',name:'VD Kod',icon:'💻',desc:'Bygger kod. En chatt = en version.',when:'Kodning'},{n:'6',name:'Cowork',icon:'🤝',desc:'Claude Desktop + Computer Use.',when:'Filåtkomst'}]},{cat:'✅ Kvalitet',items:[{n:'7',name:'QA',icon:'🔍',desc:'10 testområden.',when:'Före V1.0'},{n:'8',name:'Design Polish',icon:'🎨',desc:'16 områden → Meta-nivå.',when:'Före launch'},{n:'—',name:'Redesign',icon:'🔄',desc:'Nytt designsystem.',when:'Nytt utseende'},{n:'—',name:'Röntgen',icon:'🔬',desc:'Teknisk djupanalys.',when:'Analysera sajt'}]},{cat:'🧰 Specialister',items:[{n:'9',name:'Automation',icon:'🤖',desc:'Scripts, bots, email.',when:'Automatisera',modes:['IG-bot','Email','Scraper']},{n:'10',name:'Produktfoto',icon:'📸',desc:'Shot lists, ljussättning.',when:'Bilder'},{n:'11',name:'Copywriter',icon:'✍️',desc:'Text som säljer.',when:'Copy',modes:['Landing','Email','Ads','DM']},{n:'12',name:'Sälj-Coach',icon:'💼',desc:'Cold email, rollspel.',when:'B2B',modes:['Email','LinkedIn','Rollspel']}]},{cat:'📣 Tillväxt',items:[{n:'13',name:'SEO',icon:'🔎',desc:'Nyckelord, on-page, JSON-LD.',when:'Post-launch'},{n:'14',name:'Social Media',icon:'📱',desc:'Kalender, hashtags.',when:'Veckovis'},{n:'15',name:'Konkurrent-Spy',icon:'🕵️',desc:'7-stegs dissekering.',when:'Konkurrent',modes:['Full','Snabb','Bevakning']},{n:'19',name:'Telegram',icon:'💬',desc:'Content, schema.',when:'TS/Potens'}]},{cat:'📊 Analys',items:[{n:'16',name:'Reflektion',icon:'🧘',desc:'Veckoreflektion.',when:'Söndagar'},{n:'17',name:'Ekonomi',icon:'💰',desc:'Översikt, ROI.',when:'Månatlig'},{n:'18',name:'Karriär',icon:'🎯',desc:'Intervju-prep.',when:'Jobb'},{n:'20',name:'Juridik',icon:'⚖️',desc:'GDPR, policy.',when:'Före launch'}]},{cat:'🚁 Överblick',items:[{n:'21',name:'Helikopter',icon:'🚁',desc:'Alla projekt, prio.',when:'Mån + fre'},{n:'22',name:'Handover',icon:'📄',desc:'Dokumenterar allt.',when:'V1.0'}]},{cat:'🔬 Research',items:[{n:'R1',name:'Strategi',icon:'🔬',desc:'Validera, konkurrenter.',when:'Innan bygg',modes:['/projekt','/konkurrent','/pris','/tech','/trend','/all']},{n:'R2',name:'Marknad',icon:'📡',desc:'Vem köper, var.',when:'Målgrupp',modes:['/målgrupp','/kanal','/seo','/ads','/social','/all']},{n:'R3',name:'Design & Kod',icon:'🎨',desc:'UI, UX, libraries.',when:'Design/kod',modes:['/ui','/ux','/kod','/compliance','/all']},{n:'R4',name:'Tillväxt',icon:'🚀',desc:'Growth, retention.',when:'Post-launch'},{n:'R5',name:'Personlig',icon:'🧠',desc:'Produktivitet.',when:'Personligt'}]}];
+const FLOW=['💡 Idé','→','🔬 Research','→','🎨 Design','→','🔨 Bygg','→','⚙️ Features','→','🔍 QA','→','✨ Polish','→','⚖️ Juridik','→','🔎 SEO','→','🚀 Launch','→','📈 Growth'];
+function renderSteg(){const q=(document.getElementById('steg-search')?.value||'').toLowerCase();document.getElementById('steg-flow').innerHTML=FLOW.map(s=>s==='→'?'<span class="arr">→</span>':`<span class="sf">${s}</span>`).join('');let h='';STEG.forEach(cat=>{const f=cat.items.filter(i=>!q||(i.name+i.desc+i.when+(i.modes||[]).join('')).toLowerCase().includes(q));if(!f.length)return;h+=`<div class="steg-cat"><h3 onclick="this.parentElement.classList.toggle('collapsed')">${cat.cat}</h3><div class="steg-body">`;f.forEach(i=>{h+=`<div class="steg-item"><strong>${i.icon} ${i.n!=='—'?'Steg '+i.n+': ':''}${i.name}</strong><div class="desc">${i.desc}</div><div class="when">📌 ${i.when}</div>${i.modes?`<div class="modes">${i.modes.map(m=>`<span class="mode-tag">${m}</span>`).join('')}</div>`:''}</div>`});h+='</div></div>'});document.getElementById('steg-list').innerHTML=h}
+// ═══ DATA ═══
 function expD(){const b=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='km-data.json';a.click();toast('Exporterad ✅')}
-function impD(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{D=JSON.parse(ev.target.result);save();renderAll();toast('Importerad ✅')}catch(err){toast('Fel','err')}};r.readAsText(f);e.target.value=''}
-function clrD(){if(!confirm('Rensa ALL data?'))return;localStorage.removeItem(SK);D={projects:DEF_P.map(p=>({...p,id:gid(),milestones:p.milestones.map(m=>({...m,id:gid()}))}))};save();renderAll();toast('Rensat')}
-
-function renderAll(){renderStats();renderProjects();renderSteg()}
+function impD(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{D=JSON.parse(ev.target.result);if(!D.personal)D.personal=[];save();renderAll();toast('Importerad ✅')}catch(err){toast('Fel','err')}};r.readAsText(f);e.target.value=''}
+function clrD(){if(!confirm('Rensa ALL data?'))return;localStorage.removeItem(SK);D={projects:DEF_P.map(p=>({...p,id:gid(),milestones:p.milestones.map(m=>({...m,id:gid()}))})),personal:[]};save();renderAll();toast('Rensat')}
+function renderAll(){renderStats();renderProjList('biz-list',isBiz);renderProjList('pers-list',isPers);renderPrivat();renderSteg()}
 renderAll();
 </script>
 </body>
