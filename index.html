@@ -11,87 +11,103 @@
 body{font-family:-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100dvh;font-size:14px;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom);max-width:500px;margin:0 auto}
 button{cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;background:none;border:none;color:inherit}
 input,select,textarea{font-family:inherit;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--t1);border-radius:8px;padding:10px 12px;width:100%;outline:none;font-size:16px}
-input:focus,select:focus{border-color:var(--pri)}
-select option{background:#14142a}
+input:focus,select:focus{border-color:var(--pri)}select option{background:#14142a}
 ::-webkit-scrollbar{height:0;width:0}
 label{display:block;color:var(--t2);font-size:11px;margin:10px 0 4px;text-transform:uppercase;letter-spacing:1px}
 
-.page{padding:16px 16px 80px}
-.hdr{padding:8px 0 16px;display:flex;align-items:center;justify-content:space-between}
-.hdr h1{font-size:26px;font-weight:700;letter-spacing:-0.5px}
-.hdr-sub{font-size:11px;color:var(--t3);margin-top:2px}
-.hdr-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t2)}
-.hdr-btn:active{background:rgba(255,255,255,0.08)}
+.page{padding:14px 14px 90px}
+.hdr{padding:4px 0 14px;display:flex;align-items:center;justify-content:space-between}
+.hdr h1{font-size:24px;font-weight:700;letter-spacing:-0.5px}
+.hdr-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--t2)}
 
-.range{display:flex;gap:4px;background:rgba(255,255,255,0.04);padding:4px;border-radius:10px;margin-bottom:18px}
-.range button{flex:1;padding:10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--t2);min-height:40px}
+.mtabs{display:flex;gap:3px;background:rgba(255,255,255,0.04);padding:4px;border-radius:10px;margin-bottom:16px}
+.mtabs button{flex:1;padding:10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--t2);min-height:40px}
+.mtabs button.on{background:var(--pri);color:#fff}
+
+.tp{display:none}.tp.active{display:block}
+.sec{font-size:10px;font-weight:700;color:var(--t2);margin:14px 0 8px;text-transform:uppercase;letter-spacing:1.5px}
+.empty{padding:8px 0;font-size:11px;color:rgba(255,255,255,0.1)}
+
+/* ═══ PROJEKT-VY ═══ */
+.prow{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer}
+.prow.exp{border-radius:12px 12px 0 0;border-bottom:none;margin-bottom:0;border-color:rgba(99,102,241,0.2)}
+.p-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.p-body{flex:1;min-width:0}
+.p-name{font-size:15px;font-weight:600}
+.p-meta{font-size:10px;color:var(--t2);margin-top:2px}
+.p-next{color:var(--work)}
+.p-edit{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t3);flex-shrink:0}
+.p-edit:active{background:rgba(255,255,255,0.04);color:var(--t2)}
+.p-chev{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t3);flex-shrink:0}
+.p-chev.open{background:rgba(99,102,241,0.1);border-color:rgba(99,102,241,0.2);color:var(--pri)}
+
+/* LODRÄT FLOW */
+.vflow{background:rgba(255,255,255,0.015);border:1px solid rgba(99,102,241,0.2);border-top:none;border-radius:0 0 12px 12px;padding:18px 14px 12px;margin-bottom:8px}
+.ms{display:flex;gap:12px;position:relative;padding-bottom:16px}
+.ms:last-of-type{padding-bottom:4px}
+.ms-col{position:relative;flex-shrink:0;width:30px;display:flex;justify-content:center}
+.ms-line{position:absolute;left:50%;top:30px;bottom:-16px;width:2px;background:rgba(255,255,255,0.06);transform:translateX(-50%)}
+.ms:last-of-type .ms-line{display:none}
+.ms-line.done{background:var(--ok)}
+.ms-line.work{background:linear-gradient(180deg,var(--ok),var(--work))}
+.ms-dot{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;z-index:1;background:#0a0a0f;cursor:pointer;flex-shrink:0}
+.ms-dot:active{transform:scale(0.9)}
+.ms-dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.ms-dot.work{background:var(--work);border-color:var(--work);color:#fff;box-shadow:0 0 10px rgba(245,158,11,0.4);animation:pulseY 2s infinite}
+@keyframes pulseY{0%,100%{box-shadow:0 0 6px rgba(245,158,11,0.3)}50%{box-shadow:0 0 14px rgba(245,158,11,0.5)}}
+.ms-body{flex:1;min-width:0;padding-top:4px;cursor:pointer}
+.ms-text{font-size:14px;font-weight:600;line-height:1.3;word-wrap:break-word}
+.ms-text.done{text-decoration:line-through;color:rgba(255,255,255,0.3)}
+.ms-text.work{color:var(--work)}
+.ms-dl{font-size:11px;color:var(--t2);margin-top:3px}
+.ms-dl.today{color:var(--pri);font-weight:600}
+.ms-dl.soon{color:var(--work)}
+.ms-dl.over{color:var(--err)}
+.ms-actions{display:flex;gap:2px;flex-shrink:0;padding-top:2px}
+.ms-act{padding:4px 6px;min-height:28px;min-width:28px;border-radius:5px;font-size:11px;color:var(--t3)}
+.ms-act:active{color:var(--t1);background:rgba(255,255,255,0.04)}
+.ms-add{display:flex;gap:12px;align-items:center;padding-top:4px;cursor:pointer;width:100%}
+.ms-add-btn{width:30px;height:30px;border-radius:50%;border:1.5px dashed rgba(255,255,255,0.1);background:#0a0a0f;color:var(--t3);font-size:14px;display:flex;align-items:center;justify-content:center;z-index:1;flex-shrink:0}
+.ms-add:active .ms-add-btn{border-color:var(--pri);color:var(--pri)}
+.ms-add-text{font-size:12px;color:var(--t3)}
+
+/* ═══ DAGAR-VY ═══ */
+.range{display:flex;gap:4px;background:rgba(255,255,255,0.04);padding:4px;border-radius:10px;margin-bottom:16px}
+.range button{flex:1;padding:8px;border-radius:8px;font-size:11px;font-weight:600;color:var(--t2);min-height:36px}
 .range button.on{background:var(--pri);color:#fff}
-
-.stats{display:flex;gap:8px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:20px}
+.stats{display:flex;gap:8px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:18px}
 .stat{flex:1;text-align:center}
-.stat-num{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.stat-num{font-size:20px;font-weight:700;letter-spacing:-0.5px}
 .stat-num.r{color:var(--err)}.stat-num.g{color:var(--ok)}.stat-num.b{color:var(--pri)}
 .stat-lbl{font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-
-.day{margin-bottom:22px}
+.day{margin-bottom:20px}
 .day-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
 .day-name{font-size:22px;font-weight:700;letter-spacing:-0.5px}
 .day-name.today{color:var(--pri)}.day-name.over{color:var(--err)}
 .day-date{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px}
 .day-cnt{font-size:10px;color:var(--t2);margin-left:auto;background:rgba(255,255,255,0.04);padding:2px 8px;border-radius:6px}
-
-.goal{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden}
-.goal.done .g-text{text-decoration:line-through;opacity:.4}
-.goal.over{border-color:rgba(239,68,68,0.15);background:rgba(239,68,68,0.02)}
-.goal-main{display:flex;align-items:center;gap:11px;padding:13px}
-.g-chk{width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;color:transparent;cursor:pointer}
-.g-chk.on{background:var(--ok);border-color:var(--ok);color:#fff}
-.g-chk:active{transform:scale(0.85)}
-.g-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.g-body{flex:1;min-width:0;cursor:pointer}
-.g-text{font-size:14px;font-weight:600;line-height:1.3}
-.g-meta{font-size:10px;color:var(--t2);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.g-proj{font-weight:600}
-.g-prog{font-size:9px;color:var(--t3);background:rgba(255,255,255,0.04);padding:1px 6px;border-radius:4px}
-.g-actions{display:flex;gap:4px;flex-shrink:0}
-.g-edit{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3)}
-.g-edit:active{background:rgba(255,255,255,0.04);color:var(--t2)}
-.g-chev{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t2)}
-.g-chev.open{background:rgba(99,102,241,0.1);border-color:rgba(99,102,241,0.2);color:var(--pri)}
-
-.steps{padding:0 14px 14px;border-top:1px solid var(--border);padding-top:10px}
-.step{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.025);position:relative}
-.step:last-of-type{border:none}
-.step::before{content:'';position:absolute;left:11px;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,0.05);z-index:0}
-.step:first-child::before{top:14px}
-.step:last-of-type::before{display:none}
-.s-chk{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:transparent;cursor:pointer;background:#0a0a0f;z-index:1;margin-top:1px}
-.s-chk.on{background:var(--ok);border-color:var(--ok);color:#fff}
-.s-chk.work{background:var(--work);border-color:var(--work);color:#fff}
-.s-chk:active{transform:scale(0.85)}
-.s-body{flex:1;min-width:0;padding-top:1px}
-.s-text{font-size:13px;line-height:1.4;color:rgba(255,255,255,0.7)}
-.s-text.done{text-decoration:line-through;color:rgba(255,255,255,0.25)}
-.s-text.work{color:var(--work);font-weight:500}
-.s-dl{font-size:10px;color:var(--t3);margin-top:2px}
-.s-dl.soon{color:var(--work)}.s-dl.over{color:var(--err)}
-.s-actions{display:flex;flex-shrink:0}
-.s-act{padding:4px;min-width:24px;min-height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t3);border-radius:4px}
-.s-act:active{color:var(--t1);background:rgba(255,255,255,0.04)}
-.add-step{display:flex;align-items:center;gap:10px;padding:10px 0 4px;color:var(--t3);font-size:12px;cursor:pointer;width:100%}
-.add-step-icon{width:22px;height:22px;border-radius:50%;border:1.5px dashed rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:11px;background:#0a0a0f;z-index:1;flex-shrink:0}
-
-.empty{padding:8px 0;font-size:12px;color:rgba(255,255,255,0.1)}
-.add-goal{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:rgba(255,255,255,0.015);border:1.5px dashed rgba(255,255,255,0.08);border-radius:12px;color:var(--t3);font-size:12px;width:100%;margin-top:4px}
-.add-goal:active{border-color:var(--pri);color:var(--pri)}
-
-.fab{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--pri);color:#fff;padding:14px 24px;border-radius:30px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(99,102,241,0.4);display:flex;align-items:center;gap:8px;z-index:50}
-.fab:active{transform:translateX(-50%) scale(0.95)}
-
-.week-div{padding:24px 0 14px;display:flex;align-items:center;gap:12px}
-.week-div h2{font-size:12px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:1.5px}
+.dmal{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:6px;padding:12px 13px;display:flex;align-items:center;gap:10px}
+.dmal.over{border-color:rgba(239,68,68,0.15);background:rgba(239,68,68,0.02)}
+.d-dot{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;flex-shrink:0;cursor:pointer}
+.d-dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.d-dot.work{background:var(--work);border-color:var(--work);color:#fff}
+.d-dot:active{transform:scale(0.85)}
+.d-cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.d-body{flex:1;min-width:0;cursor:pointer}
+.d-text{font-size:13px;font-weight:500;line-height:1.3;word-wrap:break-word}
+.d-text.done{text-decoration:line-through;opacity:.4}
+.d-text.work{color:var(--work)}
+.d-meta{font-size:10px;color:var(--t2);margin-top:2px;display:flex;gap:6px}
+.d-proj{font-weight:600}
+.week-div{padding:20px 0 12px;display:flex;align-items:center;gap:12px}
+.week-div h2{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:1.5px}
 .week-div-line{flex:1;height:1px;background:var(--border)}
 
+/* FAB */
+.fab{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--pri);color:#fff;padding:13px 22px;border-radius:28px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(99,102,241,0.4);display:flex;align-items:center;gap:8px;z-index:50}
+.fab:active{transform:translateX(-50%) scale(0.95)}
+
+/* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;justify-content:center;align-items:flex-end}
 .modal-bg.open{display:flex}
 .modal{background:#111120;border:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;animation:su .25s}
@@ -104,155 +120,200 @@ label{display:block;color:var(--t2);font-size:11px;margin:10px 0 4px;text-transf
 .btn-ghost{border:1px solid var(--border);color:var(--t2)}
 .btn-danger{background:var(--err);color:#fff}
 .row2{display:flex;gap:8px}.row2>*{flex:1}
-
 .proj-list{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.proj-chip{display:flex;align-items:center;gap:5px;padding:6px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:18px;font-size:12px}
+.proj-chip{display:flex;align-items:center;gap:5px;padding:7px 11px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:18px;font-size:12px}
 .proj-chip.sel{background:rgba(99,102,241,0.15);border-color:var(--pri)}
 .proj-chip .pd{width:8px;height:8px;border-radius:50%}
-.proj-chip-x{margin-left:4px;color:var(--t3);font-size:10px;padding:2px 4px}
 
 .toast-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:200}
-.toast{padding:10px 18px;border-radius:10px;font-size:13px;color:#fff;margin-bottom:6px;animation:tin .2s;text-align:center}
+.toast{padding:10px 18px;border-radius:10px;font-size:13px;color:#fff;margin-bottom:6px;animation:tin .2s}
 .toast.ok{background:#065f46}.toast.err{background:#7f1d1d}
 @keyframes tin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
-@media(min-width:700px){.page{padding:24px 24px 80px}.modal-bg{align-items:center}.modal{border-radius:14px;animation:none;max-height:85vh}}
+@media(min-width:700px){.page{padding:20px 24px 90px}.modal-bg{align-items:center}.modal{border-radius:14px;animation:none;max-height:85vh}}
 </style>
 </head>
 <body>
 <div class="page">
   <div class="hdr">
-    <div><h1>Mål</h1><div class="hdr-sub">Vad vill du ha klart?</div></div>
+    <h1>KM Mål</h1>
     <button class="hdr-btn" onclick="openSettings()">⚙️</button>
   </div>
-  <div class="range">
-    <button class="on" data-r="7" onclick="setRange(7)">Denna vecka</button>
-    <button data-r="14" onclick="setRange(14)">2 veckor</button>
+  <div class="mtabs">
+    <button class="on" data-t="proj" onclick="setTab('proj')">🎯 Projekt</button>
+    <button data-t="dag" onclick="setTab('dag')">📅 Dagar</button>
   </div>
-  <div id="stats"></div>
-  <div id="days"></div>
+  <div class="tp active" id="tp-proj"><div id="proj-list"></div></div>
+  <div class="tp" id="tp-dag">
+    <div class="range"><button class="on" data-r="7" onclick="setRange(7)">Denna vecka</button><button data-r="14" onclick="setRange(14)">2 veckor</button></div>
+    <div id="stats"></div>
+    <div id="days"></div>
+  </div>
 </div>
 <button class="fab" onclick="openGoal()">+ Nytt mål</button>
 <div class="modal-bg" id="modal" onclick="if(event.target===this)closeM()"><div class="modal" id="mc"></div></div>
 <div class="toast-wrap" id="toasts"></div>
 <script>
-const SK='km_mal_v1',g=()=>Math.random().toString(36).slice(2,8),esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-
-// DEFAULT PROJECTS
+const SK='km_mal_v2',g=()=>Math.random().toString(36).slice(2,8),esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const DEF_PROJ=[{id:g(),name:'Nexioo',color:'#6366f1'},{id:g(),name:'TS',color:'#10B981'},{id:g(),name:'DamSmycken',color:'#a78bfa'},{id:g(),name:'ApexForm',color:'#f97316'},{id:g(),name:'Byyt',color:'#22d3ee'},{id:g(),name:'Personligt',color:'#facc15'}];
 
 function load(){try{const d=JSON.parse(localStorage.getItem(SK));if(d?.projects)return d}catch(e){}return{projects:DEF_PROJ,goals:[]}}
-let D=load();let range=7,xGoal=null;
-D.goals.forEach(g=>{if(!g.steps)g.steps=[]});
+let D=load();let tab='proj',range=7,xProj=null;
+// Migrate old format
+D.goals.forEach(go=>{if(!go.status)go.status=go.done?'done':'upcoming';if(!go.order)go.order=0});
 function saveLocal(){localStorage.setItem(SK,JSON.stringify(D))}
 
-// SUPABASE
 const SB_URL='https://fpcmzorgfhdsqitmnhpn.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwY216b3JnZmhkc3FpdG1uaHBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MTYyNTUsImV4cCI6MjA5MDM5MjI1NX0.ERVLiXBo9kRnx_NGfBCnWzEyK6yc2SAZofsZIeyUohA';
 const sb=window.supabase.createClient(SB_URL,SB_KEY);let syncing=false;
-async function loadDB(){try{const{data}=await sb.from('dashboard_data').select('data').eq('id','km_mal').single();if(data?.data?.projects)return data.data}catch(e){}return null}
-async function saveToDB(){if(syncing)return;syncing=true;try{await sb.from('dashboard_data').upsert({id:'km_mal',data:D,updated_at:new Date().toISOString()})}catch(e){}syncing=false}
+async function loadDB(){try{const{data}=await sb.from('dashboard_data').select('data').eq('id','km_mal_v2').single();if(data?.data?.projects)return data.data}catch(e){}return null}
+async function saveToDB(){if(syncing)return;syncing=true;try{await sb.from('dashboard_data').upsert({id:'km_mal_v2',data:D,updated_at:new Date().toISOString()})}catch(e){}syncing=false}
 function save(){saveLocal();saveToDB()}
-(async()=>{const r=await loadDB();if(r?.projects){D=r;D.goals.forEach(g=>{if(!g.steps)g.steps=[]});saveLocal();render()}})();
-document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'){const r=await loadDB();if(r?.projects){D=r;D.goals.forEach(g=>{if(!g.steps)g.steps=[]});saveLocal();render()}}});
+(async()=>{const r=await loadDB();if(r?.projects){D=r;D.goals.forEach(go=>{if(!go.status)go.status=go.done?'done':'upcoming';if(!go.order)go.order=0});saveLocal();render()}})();
+document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'){const r=await loadDB();if(r?.projects){D=r;D.goals.forEach(go=>{if(!go.status)go.status=go.done?'done':'upcoming';if(!go.order)go.order=0});saveLocal();render()}}});
 
 function toast(m,t='ok'){const d=document.createElement('div');d.className='toast '+t;d.textContent=m;document.getElementById('toasts').appendChild(d);setTimeout(()=>d.remove(),2000)}
 function openM(h){document.getElementById('mc').innerHTML=h;document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden'}
 function closeM(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
+function setTab(t){tab=t;document.querySelectorAll('.mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('.tp').forEach(x=>x.classList.toggle('active',x.id==='tp-'+t));render()}
 function setRange(r){range=r;document.querySelectorAll('.range button').forEach(b=>b.classList.toggle('on',+b.dataset.r===r));render()}
 
 const MOS=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
 const DAYS=['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'];
 function ymd(d){return d.toISOString().slice(0,10)}
 function shortDl(s){if(!s)return'';const t=new Date(s);return t.getDate()+' '+MOS[t.getMonth()]}
-function dlStatus(s){if(!s)return'';const t=new Date(s),n=new Date();n.setHours(0,0,0,0);const diff=Math.ceil((t-n)/(864e5));if(diff<0)return'over';if(diff<=3)return'soon';return''}
-function dlText(s){if(!s)return'';const t=new Date(s),n=new Date();n.setHours(0,0,0,0);const diff=Math.ceil((t-n)/(864e5));if(diff===0)return'Idag';if(diff===1)return'Imorgon';if(diff===-1)return'Igår';if(diff<0)return`${-diff} dagar sen`;return shortDl(s)}
+function dlStatus(s){if(!s)return'';const t=new Date(s),n=new Date();n.setHours(0,0,0,0);const diff=Math.ceil((t-n)/(864e5));if(diff<0)return'over';if(diff===0)return'today';if(diff<=3)return'soon';return''}
+function dlText(s){if(!s)return'Ingen deadline';const t=new Date(s),n=new Date();n.setHours(0,0,0,0);const diff=Math.ceil((t-n)/(864e5));const wd=DAYS[t.getDay()];if(diff<0)return`${-diff} d sen · ${shortDl(s)}`;if(diff===0)return`📅 Idag · ${shortDl(s)}`;if(diff===1)return`Imorgon · ${shortDl(s)}`;if(diff<=6)return`${wd} · ${shortDl(s)}`;return shortDl(s)}
+function getWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-dn);const ys=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-ys)/864e5+1)/7)}
 
-function render(){
+function render(){if(tab==='proj')renderProj();else renderDagar()}
+
+// ═══ PROJEKT-VY ═══
+function renderProj(){
+  const el=document.getElementById('proj-list');let h='';
+  D.projects.forEach(p=>{
+    const pGoals=D.goals.filter(go=>go.projectId===p.id).sort((a,b)=>{
+      // Sort: done last, then by deadline, then by order
+      if(a.status==='done'&&b.status!=='done')return 1;
+      if(a.status!=='done'&&b.status==='done')return -1;
+      if(a.date&&b.date)return a.date.localeCompare(b.date);
+      if(a.date)return -1;if(b.date)return 1;
+      return(a.order||0)-(b.order||0);
+    });
+    const done=pGoals.filter(go=>go.status==='done').length,tot=pGoals.length;
+    const next=pGoals.find(go=>go.status!=='done');
+    const isExp=xProj===p.id;
+    h+=`<div class="prow${isExp?' exp':''}" onclick="togProj('${p.id}')">
+      <div class="p-dot" style="background:${p.color}"></div>
+      <div class="p-body"><div class="p-name">${esc(p.name)}</div><div class="p-meta">${done}/${tot} mål${next?` · <span class="p-next">Nästa: ${esc(next.text)}${next.date?` · ${dlText(next.date).replace('📅 ','')}`:''}</span>`:''}</div></div>
+      <button class="p-edit" onclick="event.stopPropagation();editProj('${p.id}')">✏️</button>
+      <div class="p-chev${isExp?' open':''}">${isExp?'▴':'▾'}</div>
+    </div>`;
+    if(isExp){
+      h+=`<div class="vflow">`;
+      if(!pGoals.length)h+=`<div class="empty" style="text-align:center;padding:20px 0">Inga mål än — lägg till ditt första ↓</div>`;
+      pGoals.forEach((go,i)=>{
+        const next=pGoals[i+1];
+        let lc='';if(next){if(go.status==='done'&&next.status==='done')lc='done';else if(go.status==='done'&&next.status==='work')lc='work'}
+        const dlCls=dlStatus(go.date);
+        h+=`<div class="ms">
+          <div class="ms-col">
+            <div class="ms-dot ${go.status==='done'?'done':go.status==='work'?'work':''}" onclick="event.stopPropagation();cycleGoal('${go.id}')">${go.status==='done'?'✓':go.status==='work'?'▶':''}</div>
+            <div class="ms-line ${lc}"></div>
+          </div>
+          <div class="ms-body" onclick="openGoal('${go.id}')">
+            <div class="ms-text ${go.status==='done'?'done':go.status==='work'?'work':''}">${esc(go.text)}</div>
+            <div class="ms-dl ${dlCls}">${dlText(go.date)}</div>
+          </div>
+          <div class="ms-actions">
+            <button class="ms-act" onclick="event.stopPropagation();openGoal('${go.id}')">✏️</button>
+            <button class="ms-act" onclick="event.stopPropagation();delGoal('${go.id}')">✕</button>
+          </div>
+        </div>`;
+      });
+      h+=`<div class="ms-add" onclick="openGoal(null,null,'${p.id}')"><button class="ms-add-btn">+</button><span class="ms-add-text">Nytt mål</span></div></div>`;
+    }
+  });
+  if(!D.projects.length)h+=`<div class="empty" style="text-align:center;padding:40px 0">Inga projekt — gå till ⚙️ för att lägga till</div>`;
+  el.innerHTML=h;
+}
+function togProj(id){xProj=xProj===id?null:id;renderProj()}
+function cycleGoal(id){const go=D.goals.find(x=>x.id===id);if(!go)return;go.status={upcoming:'work',work:'done',done:'upcoming'}[go.status]||'upcoming';go.done=go.status==='done';save();render()}
+
+// ═══ DAGAR-VY ═══
+function renderDagar(){
   const now=new Date();now.setHours(0,0,0,0);const ts=ymd(now);
-  // Build days array
   const days=[];for(let i=0;i<range;i++){const d=new Date(now);d.setDate(d.getDate()+i);days.push(d)}
-  // Stats
-  const todayG=D.goals.filter(g=>g.date===ts);const todayCnt=todayG.length;const doneCnt=D.goals.filter(g=>g.done&&g.date===ts).length;
-  const overdue=D.goals.filter(g=>g.date<ts&&!g.done);
+  const todayG=D.goals.filter(go=>go.date===ts);
+  const doneCnt=todayG.filter(go=>go.status==='done').length;
+  const overdue=D.goals.filter(go=>go.date&&go.date<ts&&go.status!=='done');
   const weekEnd=new Date(now);weekEnd.setDate(weekEnd.getDate()+range);
-  const weekCnt=D.goals.filter(g=>g.date>=ts&&g.date<ymd(weekEnd)).length;
-  document.getElementById('stats').innerHTML=`<div class="stats"><div class="stat"><div class="stat-num b">${todayCnt}</div><div class="stat-lbl">Idag</div></div><div class="stat"><div class="stat-num g">${doneCnt}</div><div class="stat-lbl">Klara</div></div><div class="stat"><div class="stat-num r">${overdue.length}</div><div class="stat-lbl">Sen</div></div><div class="stat"><div class="stat-num">${weekCnt}</div><div class="stat-lbl">${range===7?'Veckan':'2 veckor'}</div></div></div>`;
-  // Days
+  const weekCnt=D.goals.filter(go=>go.date&&go.date>=ts&&go.date<ymd(weekEnd)).length;
+  document.getElementById('stats').innerHTML=`<div class="stats"><div class="stat"><div class="stat-num b">${todayG.length}</div><div class="stat-lbl">Idag</div></div><div class="stat"><div class="stat-num g">${doneCnt}</div><div class="stat-lbl">Klara</div></div><div class="stat"><div class="stat-num r">${overdue.length}</div><div class="stat-lbl">Sen</div></div><div class="stat"><div class="stat-num">${weekCnt}</div><div class="stat-lbl">${range===7?'Veckan':'2 veckor'}</div></div></div>`;
   let h='';
-  if(overdue.length){h+=`<div class="day"><div class="day-hdr"><span class="day-name over">Försenade</span><span class="day-cnt">${overdue.length}</span></div>`;overdue.sort((a,b)=>a.date.localeCompare(b.date)).forEach(go=>{h+=goalCard(go)});h+=`</div>`}
-  days.forEach((d,i)=>{const ds=ymd(d);const dGoals=D.goals.filter(go=>go.date===ds);const label=i===0?'Idag':i===1?'Imorgon':DAYS[d.getDay()];const dateStr=`${d.getDate()} ${MOS[d.getMonth()]}`;
+  if(overdue.length){h+=`<div class="day"><div class="day-hdr"><span class="day-name over">Försenade</span><span class="day-cnt">${overdue.length}</span></div>`;overdue.sort((a,b)=>a.date.localeCompare(b.date)).forEach(go=>{h+=dagCard(go,true)});h+=`</div>`}
+  days.forEach((d,i)=>{
     if(i===7){h+=`<div class="week-div"><h2>Vecka ${getWeek(d)}</h2><div class="week-div-line"></div></div>`}
+    const ds=ymd(d);const dGoals=D.goals.filter(go=>go.date===ds);
+    const label=i===0?'Idag':i===1?'Imorgon':DAYS[d.getDay()];
+    const dateStr=`${d.getDate()} ${MOS[d.getMonth()]}`;
     h+=`<div class="day"><div class="day-hdr"><span class="day-name${i===0?' today':''}">${label}</span><span class="day-date">${dateStr}</span>${dGoals.length?`<span class="day-cnt">${dGoals.length}</span>`:''}</div>`;
     if(!dGoals.length)h+=`<div class="empty">Inga mål ✨</div>`;
-    dGoals.forEach(go=>{h+=goalCard(go)});
-    h+=`<button class="add-goal" onclick="openGoal(null,'${ds}')">+ Lägg till mål</button></div>`;
+    dGoals.forEach(go=>{h+=dagCard(go,false)});
+    h+=`</div>`;
   });
   document.getElementById('days').innerHTML=h;
 }
-
-function getWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-dn);const ys=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-ys)/864e5+1)/7)}
-
-function goalCard(go){
-  const proj=D.projects.find(p=>p.id===go.projectId);const isExp=xGoal===go.id;const isOver=go.date<ymd(new Date())&&!go.done;
-  const stD=go.steps.filter(s=>s.status==='done').length;const stT=go.steps.length;
-  let h=`<div class="goal${go.done?' done':''}${isOver?' over':''}"><div class="goal-main">
-    <div class="g-chk${go.done?' on':''}" onclick="toggleGoal('${go.id}')">${go.done?'✓':''}</div>
-    ${proj?`<div class="g-dot" style="background:${proj.color}"></div>`:''}
-    <div class="g-body" onclick="${stT?`expandGoal('${go.id}')`:`openGoal('${go.id}')`}">
-      <div class="g-text">${esc(go.text)}</div>
-      <div class="g-meta">${proj?`<span class="g-proj">${esc(proj.name)}</span>`:''}${stT?`<span class="g-prog">${stD}/${stT} steg</span>`:''}${isOver?`<span style="color:var(--err)">${dlText(go.date)}</span>`:''}</div>
-    </div>
-    <div class="g-actions">
-      <button class="g-edit" onclick="event.stopPropagation();openGoal('${go.id}')">✏️</button>
-      ${stT?`<button class="g-chev${isExp?' open':''}" onclick="event.stopPropagation();expandGoal('${go.id}')">${isExp?'▴':'▾'}</button>`:''}
+function dagCard(go,isOver){
+  const p=D.projects.find(x=>x.id===go.projectId);
+  return `<div class="dmal${isOver?' over':''}">
+    <div class="d-dot ${go.status==='done'?'done':go.status==='work'?'work':''}" onclick="event.stopPropagation();cycleGoal('${go.id}')">${go.status==='done'?'✓':go.status==='work'?'▶':''}</div>
+    ${p?`<div class="d-cdot" style="background:${p.color}"></div>`:''}
+    <div class="d-body" onclick="openGoal('${go.id}')">
+      <div class="d-text ${go.status==='done'?'done':go.status==='work'?'work':''}">${esc(go.text)}</div>
+      <div class="d-meta">${p?`<span class="d-proj">${esc(p.name)}</span>`:''}</div>
     </div>
   </div>`;
-  if(isExp&&stT){h+=`<div class="steps">`;
-    go.steps.forEach(s=>{const sw=s.status==='work';const sd=s.status==='done';const dlSt=dlStatus(s.deadline);
-      h+=`<div class="step"><div class="s-chk${sd?' on':sw?' work':''}" onclick="cycleStep('${go.id}','${s.id}')">${sd?'✓':sw?'▶':''}</div><div class="s-body"><div class="s-text${sd?' done':sw?' work':''}">${esc(s.text)}</div>${s.deadline?`<div class="s-dl ${dlSt}">${dlText(s.deadline)}</div>`:''}</div><div class="s-actions"><button class="s-act" onclick="editStep('${go.id}','${s.id}')">✏️</button><button class="s-act" onclick="delStep('${go.id}','${s.id}')">✕</button></div></div>`});
-    h+=`<button class="add-step" onclick="addStep('${go.id}')"><div class="add-step-icon">+</div>Lägg till delsteg</button></div>`}
-  h+=`</div>`;return h;
 }
 
-function toggleGoal(id){const go=D.goals.find(x=>x.id===id);if(!go)return;go.done=!go.done;save();render()}
-function expandGoal(id){xGoal=xGoal===id?null:id;render()}
-function cycleStep(gid,sid){const go=D.goals.find(x=>x.id===gid);if(!go)return;const s=go.steps.find(x=>x.id===sid);if(!s)return;s.status={upcoming:'work',work:'done',done:'upcoming'}[s.status]||'upcoming';save();render()}
-function delStep(gid,sid){const go=D.goals.find(x=>x.id===gid);if(!go)return;go.steps=go.steps.filter(s=>s.id!==sid);save();render()}
-
-function addStep(gid){openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>Nytt delsteg</h2><label>Text</label><input id="st-t" autofocus placeholder="T.ex. Designa hero-section"><label>Deadline</label><input type="date" id="st-d"><div class="modal-btns"><button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="doAddStep('${gid}')">Lägg till</button></div>`)}
-function doAddStep(gid){const t=document.getElementById('st-t').value.trim();if(!t)return toast('Text','err');const go=D.goals.find(x=>x.id===gid);if(!go)return;go.steps.push({id:g(),text:t,deadline:document.getElementById('st-d').value||'',status:'upcoming'});save();closeM();render();toast('✅')}
-function editStep(gid,sid){const go=D.goals.find(x=>x.id===gid);if(!go)return;const s=go.steps.find(x=>x.id===sid);if(!s)return;openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>Redigera delsteg</h2><label>Text</label><input id="st-t" value="${esc(s.text)}" autofocus><label>Deadline</label><input type="date" id="st-d" value="${s.deadline||''}"><div class="modal-btns"><button class="btn btn-danger" onclick="delStep('${gid}','${sid}');closeM()">Ta bort</button><button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="doSaveStep('${gid}','${sid}')">Spara</button></div>`)}
-function doSaveStep(gid,sid){const go=D.goals.find(x=>x.id===gid);if(!go)return;const s=go.steps.find(x=>x.id===sid);if(!s)return;s.text=document.getElementById('st-t').value.trim();s.deadline=document.getElementById('st-d').value;save();closeM();render();toast('✅')}
-
-function openGoal(id,defDate){const go=id?D.goals.find(x=>x.id===id):null;const today=ymd(new Date());const date=go?go.date:(defDate||today);
-  let projHtml='<div class="proj-list">';D.projects.forEach(p=>{const sel=go&&go.projectId===p.id;projHtml+=`<button class="proj-chip${sel?' sel':''}" onclick="selectProj('${p.id}')"><div class="pd" style="background:${p.color}"></div>${esc(p.name)}</button>`});projHtml+=`<button class="proj-chip" onclick="selectProj('')" id="pc-none">Inget</button></div>`;
-  openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>${go?'Redigera mål':'Nytt mål'}</h2><label>Mål</label><input id="g-t" value="${go?esc(go.text):''}" autofocus placeholder="T.ex. Design färdig"><label>Datum</label><input type="date" id="g-d" value="${date}"><label>Projekt</label>${projHtml}<input type="hidden" id="g-p" value="${go?go.projectId||'':''}"><div class="modal-btns">${go?`<button class="btn btn-danger" onclick="delGoal('${go.id}')">Ta bort</button>`:''}<button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="saveGoal('${id||''}')">${go?'Spara':'Skapa'}</button></div>`);
-  setTimeout(()=>{const sel=document.querySelector(`.proj-chip[onclick*="${go?go.projectId:''}"]`);if(sel&&go?.projectId)sel.classList.add('sel')},10)}
-function selectProj(pid){document.getElementById('g-p').value=pid;document.querySelectorAll('.proj-chip').forEach(c=>c.classList.remove('sel'));event.currentTarget.classList.add('sel')}
-function saveGoal(id){const t=document.getElementById('g-t').value.trim();if(!t)return toast('Text','err');const date=document.getElementById('g-d').value;const pid=document.getElementById('g-p').value;
+// ═══ GOAL MODAL ═══
+function openGoal(id,defDate,defProj){
+  const go=id?D.goals.find(x=>x.id===id):null;
+  const today=ymd(new Date());const date=go?go.date||'':(defDate||today);
+  const pid=go?go.projectId:(defProj||'');
+  let projHtml='<div class="proj-list">';
+  D.projects.forEach(p=>{const sel=pid===p.id;projHtml+=`<button class="proj-chip${sel?' sel':''}" data-pid="${p.id}" onclick="pickProj('${p.id}')"><div class="pd" style="background:${p.color}"></div>${esc(p.name)}</button>`});
+  projHtml+=`<button class="proj-chip${!pid?' sel':''}" data-pid="" onclick="pickProj('')">Inget</button></div>`;
+  openM(`<button class="modal-close" onclick="closeM()">✕</button><h2>${go?'Redigera mål':'Nytt mål'}</h2><label>Mål</label><input id="g-t" value="${go?esc(go.text):''}" autofocus placeholder="T.ex. Design färdig"><label>Deadline</label><input type="date" id="g-d" value="${date}"><label>Projekt</label>${projHtml}<input type="hidden" id="g-p" value="${pid}"><div class="modal-btns">${go?`<button class="btn btn-danger" onclick="delGoal('${go.id}');closeM()">Ta bort</button>`:''}<button class="btn btn-ghost" onclick="closeM()">Avbryt</button><button class="btn btn-pri" onclick="saveGoal('${id||''}')">${go?'Spara':'Skapa'}</button></div>`);
+}
+function pickProj(pid){document.getElementById('g-p').value=pid;document.querySelectorAll('.proj-chip').forEach(c=>c.classList.toggle('sel',c.dataset.pid===pid))}
+function saveGoal(id){
+  const t=document.getElementById('g-t').value.trim();if(!t)return toast('Text saknas','err');
+  const date=document.getElementById('g-d').value;const pid=document.getElementById('g-p').value;
   if(id){const go=D.goals.find(x=>x.id===id);if(go){go.text=t;go.date=date;go.projectId=pid}}
-  else D.goals.push({id:g(),text:t,date,projectId:pid,done:false,steps:[]});
-  save();closeM();render();toast('✅')}
-function delGoal(id){if(!confirm('Ta bort målet?'))return;D.goals=D.goals.filter(x=>x.id!==id);save();closeM();render();toast('Borttaget')}
+  else{const maxO=Math.max(0,...D.goals.filter(x=>x.projectId===pid).map(x=>x.order||0));D.goals.push({id:g(),text:t,date,projectId:pid,status:'upcoming',done:false,order:maxO+1})}
+  save();closeM();render();toast('✅')
+}
+function delGoal(id){if(!confirm('Ta bort målet?'))return;D.goals=D.goals.filter(x=>x.id!==id);save();render();toast('Borttaget')}
 
-// SETTINGS — manage projects
+// ═══ SETTINGS ═══
 function openSettings(){
-  let h=`<button class="modal-close" onclick="closeM()">✕</button><h2>Projekt</h2><div style="margin:12px 0">`;
-  D.projects.forEach(p=>{h+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="width:14px;height:14px;border-radius:50%;background:${p.color};flex-shrink:0"></div><span style="flex:1;font-size:14px">${esc(p.name)}</span><button class="g-edit" onclick="editProj('${p.id}')">✏️</button><button class="g-edit" onclick="delProj('${p.id}')">✕</button></div>`});
-  h+=`</div><button class="btn btn-pri" onclick="addProj()" style="width:100%">+ Nytt projekt</button>
-  <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border)">
+  let h=`<button class="modal-close" onclick="closeM()">✕</button><h2>Inställningar</h2><label>Projekt</label><div style="margin:8px 0">`;
+  D.projects.forEach(p=>{const cnt=D.goals.filter(go=>go.projectId===p.id).length;h+=`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><div style="width:14px;height:14px;border-radius:50%;background:${p.color};flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">${esc(p.name)}</div><div style="font-size:10px;color:var(--t2);margin-top:1px">${cnt} mål</div></div><button class="p-edit" onclick="editProj('${p.id}')">✏️</button><button class="p-edit" onclick="delProj('${p.id}')">✕</button></div>`});
+  h+=`</div><button class="btn btn-pri" onclick="addProj()" style="width:100%;margin-top:6px">+ Nytt projekt</button>
+  <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
     <button class="btn btn-ghost" onclick="expData()" style="width:100%;margin-bottom:8px">📥 Exportera data</button>
     <button class="btn btn-ghost" onclick="document.getElementById('imp-f').click()" style="width:100%">📤 Importera data</button>
     <input type="file" id="imp-f" accept=".json" style="display:none" onchange="impData(event)">
   </div>`;
-  openM(h)}
-function addProj(){const n=prompt('Projekt namn:');if(!n?.trim())return;const colors=['#6366f1','#10B981','#a78bfa','#f97316','#22d3ee','#facc15','#ec4899','#14b8a6'];const c=colors[D.projects.length%colors.length];D.projects.push({id:g(),name:n.trim(),color:c});save();openSettings()}
-function editProj(id){const p=D.projects.find(x=>x.id===id);if(!p)return;const n=prompt('Namn:',p.name);if(!n?.trim())return;const c=prompt('Färg (hex):',p.color);if(!c)return;p.name=n.trim();p.color=c;save();openSettings()}
-function delProj(id){if(!confirm('Ta bort projekt? (mål kvarstår men utan projekt)'))return;D.projects=D.projects.filter(p=>p.id!==id);D.goals.forEach(g=>{if(g.projectId===id)g.projectId=''});save();openSettings();render()}
-function expData(){const b=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='km-mal.json';a.click();toast('✅')}
-function impData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{D=JSON.parse(ev.target.result);D.goals.forEach(g=>{if(!g.steps)g.steps=[]});save();render();closeM();toast('Importerat ✅')}catch(err){toast('Fel','err')}};r.readAsText(f)}
+  openM(h);
+}
+function addProj(){const n=prompt('Projekt namn:');if(!n?.trim())return;const colors=['#6366f1','#10B981','#a78bfa','#f97316','#22d3ee','#facc15','#ec4899','#14b8a6','#f43f5e','#8b5cf6'];const c=colors[D.projects.length%colors.length];D.projects.push({id:g(),name:n.trim(),color:c});save();openSettings();render()}
+function editProj(id){const p=D.projects.find(x=>x.id===id);if(!p)return;const n=prompt('Namn:',p.name);if(!n?.trim())return;const c=prompt('Färg (hex):',p.color);if(c)p.color=c;p.name=n.trim();save();if(document.getElementById('modal').classList.contains('open'))openSettings();render()}
+function delProj(id){const cnt=D.goals.filter(go=>go.projectId===id).length;if(!confirm(`Ta bort projekt?${cnt?` (${cnt} mål blir utan projekt)`:''}`))return;D.projects=D.projects.filter(p=>p.id!==id);D.goals.forEach(go=>{if(go.projectId===id)go.projectId=''});if(xProj===id)xProj=null;save();openSettings();render()}
+function expData(){const b=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='km-mal.json';a.click();toast('Exporterat ✅')}
+function impData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{D=JSON.parse(ev.target.result);D.goals.forEach(go=>{if(!go.status)go.status=go.done?'done':'upcoming';if(!go.order)go.order=0});save();render();closeM();toast('Importerat ✅')}catch(err){toast('Fel','err')}};r.readAsText(f)}
 
 render();
 </script>
